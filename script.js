@@ -139,15 +139,21 @@ sections.forEach((section) => {
 });
 
 /* =======================================================================
-   Subtle butterfly scale as user progresses
+   Butterfly grows as user scrolls through the evolution
+   Starts at 0.55x scale and grows to 1.15x by the finale
    ======================================================================= */
+
+/* Set initial small scale */
+gsap.set(svg, { scale: 0.55 });
+
 ScrollTrigger.create({
   trigger: '#evolution',
   start: 'top top',
   end: 'bottom bottom',
-  scrub: 1.5,
+  scrub: 1.2,
   onUpdate: (self) => {
-    const s = 1 + self.progress * 0.06;
+    /* 0.55 → 1.15  (doubles in apparent area) */
+    const s = 0.55 + self.progress * 0.6;
     gsap.set(svg, { scale: s });
   },
 });
