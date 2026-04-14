@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morpho Midnight — Evolution</title>
+  <meta name="description" content="The evolution of onchain credit. Fixed-rate, fixed-term lending — the full term structure of credit, onchain for the first time.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Progress timeline -->
+  <nav class="timeline" aria-label="Scroll progress">
+    <div class="timeline-track">
+      <div class="timeline-fill"></div>
+    </div>
+    <div class="timeline-dots">
+      <div class="timeline-dot active" data-section="0"><span>Launch</span></div>
+      <div class="timeline-dot" data-section="1"><span>Callbacks</span></div>
+      <div class="timeline-dot" data-section="2"><span>Auto-rolling</span></div>
+      <div class="timeline-dot" data-section="3"><span>Vault Adapter</span></div>
+      <div class="timeline-dot" data-section="4"><span>Institutional</span></div>
+      <div class="timeline-dot" data-section="5"><span>$200T</span></div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Introducing</p>
+      <h1 class="hero-title">Morpho<br>Midnight</h1>
+      <p class="hero-subtitle">The evolution of onchain credit</p>
+      <div class="scroll-indicator">
+        <span>Scroll to explore the rollout</span>
+        <div class="scroll-arrow">
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+            <path d="M8 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Butterfly + Scroll Sections -->
+  <div class="evolution-container" id="evolution">
+
+    <!-- Sticky butterfly layer -->
+    <div class="butterfly-wrap">
+      <svg class="butterfly-svg" viewBox="0 0 1000 900" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad-tl" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#003A92"/>
+            <stop offset="100%" stop-color="#0070FF"/>
+          </linearGradient>
+          <linearGradient id="grad-tr" x1="100%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#003A92"/>
+            <stop offset="100%" stop-color="#0070FF"/>
+          </linearGradient>
+          <linearGradient id="grad-bl" x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stop-color="#003080"/>
+            <stop offset="100%" stop-color="#0060DD"/>
+          </linearGradient>
+          <linearGradient id="grad-br" x1="80%" y1="0%" x2="20%" y2="100%">
+            <stop offset="0%" stop-color="#003080"/>
+            <stop offset="100%" stop-color="#0060DD"/>
+          </linearGradient>
+          <linearGradient id="grad-body" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stop-color="#0070FF"/>
+            <stop offset="100%" stop-color="#003A92"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Upper-left wing (Callbacks) — wide, organic, rounded -->
+        <g class="wing wing-tl" data-wing="tl">
+          <path class="wing-base" d="
+            M 485 400
+            C 460 360, 400 280, 300 200
+            C 220 140, 140 90, 80 60
+            C 40 40, 10 40, 5 70
+            C -2 110, 20 180, 60 250
+            C 120 350, 240 400, 350 410
+            C 410 415, 460 412, 480 408
+            Z"/>
+          <path class="wing-fill" d="
+            M 485 400
+            C 460 360, 400 280, 300 200
+            C 220 140, 140 90, 80 60
+            C 40 40, 10 40, 5 70
+            C -2 110, 20 180, 60 250
+            C 120 350, 240 400, 350 410
+            C 410 415, 460 412, 480 408
+            Z" fill="url(#grad-tl)"/>
+          <path class="wing-vein" d="M 470 405 C 350 340, 200 220, 40 100"/>
+          <path class="wing-vein" d="M 450 395 C 330 330, 180 240, 30 160"/>
+        </g>
+
+        <!-- Upper-right wing (Auto-rolling) — mirror -->
+        <g class="wing wing-tr" data-wing="tr">
+          <path class="wing-base" d="
+            M 515 400
+            C 540 360, 600 280, 700 200
+            C 780 140, 860 90, 920 60
+            C 960 40, 990 40, 995 70
+            C 1002 110, 980 180, 940 250
+            C 880 350, 760 400, 650 410
+            C 590 415, 540 412, 520 408
+            Z"/>
+          <path class="wing-fill" d="
+            M 515 400
+            C 540 360, 600 280, 700 200
+            C 780 140, 860 90, 920 60
+            C 960 40, 990 40, 995 70
+            C 1002 110, 980 180, 940 250
+            C 880 350, 760 400, 650 410
+            C 590 415, 540 412, 520 408
+            Z" fill="url(#grad-tr)"/>
+          <path class="wing-vein" d="M 530 405 C 650 340, 800 220, 960 100"/>
+          <path class="wing-vein" d="M 550 395 C 670 330, 820 240, 970 160"/>
+        </g>
+
+        <!-- Lower-left wing (Vault Adapter) — wide, sweeping down-left -->
+        <g class="wing wing-bl" data-wing="bl">
+          <path class="wing-base" d="
+            M 485 460
+            C 455 490, 380 560, 280 640
+            C 200 700, 120 755, 70 800
+            C 30 835, 15 860, 35 875
+            C 58 890, 100 875, 160 840
+            C 260 785, 370 700, 430 610
+            C 465 555, 482 495, 485 465
+            Z"/>
+          <path class="wing-fill" d="
+            M 485 460
+            C 455 490, 380 560, 280 640
+            C 200 700, 120 755, 70 800
+            C 30 835, 15 860, 35 875
+            C 58 890, 100 875, 160 840
+            C 260 785, 370 700, 430 610
+            C 465 555, 482 495, 485 465
+            Z" fill="url(#grad-bl)"/>
+          <path class="wing-vein" d="M 478 465 C 380 540, 220 680, 55 830"/>
+          <path class="wing-vein" d="M 468 475 C 370 545, 220 665, 90 790"/>
+        </g>
+
+        <!-- Lower-right wing (Institutional) — mirror -->
+        <g class="wing wing-br" data-wing="br">
+          <path class="wing-base" d="
+            M 515 460
+            C 545 490, 620 560, 720 640
+            C 800 700, 880 755, 930 800
+            C 970 835, 985 860, 965 875
+            C 942 890, 900 875, 840 840
+            C 740 785, 630 700, 570 610
+            C 535 555, 518 495, 515 465
+            Z"/>
+          <path class="wing-fill" d="
+            M 515 460
+            C 545 490, 620 560, 720 640
+            C 800 700, 880 755, 930 800
+            C 970 835, 985 860, 965 875
+            C 942 890, 900 875, 840 840
+            C 740 785, 630 700, 570 610
+            C 535 555, 518 495, 515 465
+            Z" fill="url(#grad-br)"/>
+          <path class="wing-vein" d="M 522 465 C 620 540, 780 680, 945 830"/>
+          <path class="wing-vein" d="M 532 475 C 630 545, 780 665, 910 790"/>
+        </g>
+
+        <!-- Body -->
+        <g class="butterfly-body">
+          <ellipse class="body-base" cx="500" cy="435" rx="16" ry="50"/>
+          <ellipse class="body-fill" cx="500" cy="435" rx="16" ry="50" fill="url(#grad-body)"/>
+          <!-- Antennae -->
+          <path class="antenna" d="M 493 388 C 475 340, 440 295, 410 270"/>
+          <circle class="antenna-tip" cx="410" cy="270" r="4"/>
+          <path class="antenna" d="M 507 388 C 525 340, 560 295, 590 270"/>
+          <circle class="antenna-tip" cx="590" cy="270" r="4"/>
+        </g>
+      </svg>
+
+      <!-- Center label -->
+      <div class="butterfly-label">Midnight</div>
+    </div>
+
+    <!-- Scroll sections (these create the scrollable height) -->
+
+    <!-- Section 0: Core Protocol Launch -->
+    <section class="scroll-section" data-section="0" id="section-core">
+      <div class="section-content section-content--center">
+        <div class="feature-card" data-side="center">
+          <p class="feature-eyebrow">Day One</p>
+          <h2 class="feature-title">The Core Protocol</h2>
+          <p class="feature-description">
+            Fixed-rate, fixed-term lending. The full term structure of credit,
+            onchain for the first time. Direct lending only — security before surface area.
+          </p>
+          <div class="feature-tags">
+            <span class="tag">Immutable</span>
+            <span class="tag">Permissionless</span>
+            <span class="tag">Obligation-based</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Callbacks — Top-left wing -->
+    <section class="scroll-section" data-section="1" id="section-callbacks">
+      <div class="section-content section-content--left">
+        <div class="feature-card" data-side="left">
+          <p class="feature-eyebrow">Evolution 01</p>
+          <h2 class="feature-title">Callbacks</h2>
+          <p class="feature-description">
+            Builders can now compose Midnight into more sophisticated products.
+            Lend offers against capital already earning yield in Morpho Vaults —
+            no idle capital, ever.
+          </p>
+          <div class="feature-audience">
+            <span class="audience-label">Built for</span>
+            <span class="audience-value">Integrators & Power Curators</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Auto-rolling — Top-right wing -->
+    <section class="scroll-section" data-section="2" id="section-autorolling">
+      <div class="section-content section-content--right">
+        <div class="feature-card" data-side="right">
+          <p class="feature-eyebrow">Evolution 02</p>
+          <h2 class="feature-title">Auto-Rolling</h2>
+          <p class="feature-description">
+            Midnight positions now behave like a continuous product, not a one-shot trade.
+            No manual rollovers — capital stays productive across terms automatically.
+          </p>
+          <div class="feature-audience">
+            <span class="audience-label">Built for</span>
+            <span class="audience-value">End Users & Vault Curators</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Vault Adapter — Bottom-left wing -->
+    <section class="scroll-section" data-section="3" id="section-vaults">
+      <div class="section-content section-content--left">
+        <div class="feature-card feature-card--highlight" data-side="left">
+          <p class="feature-eyebrow">Evolution 03 — The Second Launch</p>
+          <h2 class="feature-title">Vault Adapter</h2>
+          <p class="feature-description">
+            The Midnight adapter is added to the vault registry.
+            Billions of vault liquidity can now route into fixed-rate markets.
+            This is the moment Midnight scales.
+          </p>
+          <div class="feature-audience">
+            <span class="audience-label">Unlocks</span>
+            <span class="audience-value">$1B+ vault liquidity into fixed-rate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Institutional — Bottom-right wing -->
+    <section class="scroll-section" data-section="4" id="section-institutional">
+      <div class="section-content section-content--right">
+        <div class="feature-card" data-side="right">
+          <p class="feature-eyebrow">Evolution 04</p>
+          <h2 class="feature-title">Institutional<br>Deployment</h2>
+          <p class="feature-description">
+            A named institution goes live on Midnight for the exact use case
+            described on day one. The thesis is playing out.
+            Institutional credit is moving onchain.
+          </p>
+          <div class="feature-audience">
+            <span class="audience-label">Signal</span>
+            <span class="audience-value">Institutional adoption is real</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Finale — $200T -->
+    <section class="scroll-section scroll-section--finale" data-section="5" id="section-finale">
+      <div class="section-content section-content--center">
+        <div class="feature-card feature-card--finale" data-side="center">
+          <p class="feature-eyebrow">The Vision Realized</p>
+          <h2 class="feature-title feature-title--large">The $200T Story</h2>
+          <p class="feature-description">
+            RWA. Receivables. Private credit. Non-crypto-backed loan types
+            flowing through Midnight. The infrastructure for global credit
+            is no longer theoretical.
+          </p>
+          <div class="feature-tags feature-tags--centered">
+            <span class="tag">Private Credit</span>
+            <span class="tag">RWA</span>
+            <span class="tag">Receivables</span>
+            <span class="tag">Corporate Bonds</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-brand">Morpho Midnight</p>
+      <p class="footer-tagline">The open credit network for the world</p>
+    </div>
+  </footer>
+
+  <script src="gsap.min.js"></script>
+  <script src="ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

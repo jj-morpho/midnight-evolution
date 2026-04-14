@@ -1,0 +1,535 @@
+/* ==========================================================================
+   Morpho Midnight Evolution
+   Brand: #004EC3 (Morpho Blue), deep midnight dark theme
+   ========================================================================== */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #004EC3;
+  --blue-light: #0070FF;
+  --blue-glow: rgba(0, 78, 195, 0.35);
+  --blue-subtle: rgba(0, 78, 195, 0.08);
+  --blue-border: rgba(0, 78, 195, 0.18);
+  --bg: #050510;
+  --bg-card: rgba(10, 10, 30, 0.85);
+  --bg-card-border: rgba(255, 255, 255, 0.06);
+  --text: #FFFFFF;
+  --text-dim: #9090AA;
+  --text-muted: #505068;
+  --grey-wing: #12122A;
+  --grey-wing-stroke: #1E1E40;
+  --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Timeline (fixed right side)
+   ========================================================================== */
+
+.timeline {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.timeline.visible {
+  opacity: 1;
+}
+
+.timeline-track {
+  width: 2px;
+  height: 200px;
+  background: var(--grey-wing);
+  border-radius: 1px;
+  position: relative;
+  margin-left: 4px;
+}
+
+.timeline-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: var(--blue);
+  border-radius: 1px;
+  transition: height 0.5s ease;
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+.timeline-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--grey-wing);
+  border: 1.5px solid var(--grey-wing-stroke);
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.timeline-dot.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 0 10px var(--blue-glow);
+}
+
+.timeline-dot span {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-dot.active span {
+  opacity: 1;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 78, 195, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-size: clamp(52px, 10vw, 110px);
+  font-weight: 700;
+  letter-spacing: -3px;
+  line-height: 1.0;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 22px);
+  font-weight: 300;
+  color: var(--text-dim);
+  margin-bottom: 60px;
+}
+
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.scroll-indicator span {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.scroll-arrow {
+  color: var(--blue);
+  animation: bounce 2.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* ==========================================================================
+   Evolution Container & Sticky Butterfly
+   ========================================================================== */
+
+.evolution-container {
+  position: relative;
+}
+
+.butterfly-wrap {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.butterfly-svg {
+  width: clamp(280px, 40vw, 480px);
+  height: auto;
+  transition: filter 0.8s ease;
+}
+
+/* Wing styles */
+.wing-base {
+  fill: var(--grey-wing);
+  stroke: var(--grey-wing-stroke);
+  stroke-width: 1.2;
+}
+
+.wing-fill {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.wing-vein {
+  fill: none;
+  stroke: var(--grey-wing-stroke);
+  stroke-width: 0.8;
+  opacity: 0.4;
+  transition: all 0.8s ease;
+}
+
+.wing.lit .wing-fill {
+  opacity: 1;
+}
+
+.wing.lit .wing-base {
+  stroke: rgba(0, 112, 255, 0.3);
+}
+
+.wing.lit .wing-vein {
+  stroke: rgba(0, 112, 255, 0.2);
+}
+
+/* Body */
+.body-base {
+  fill: var(--grey-wing);
+  stroke: var(--grey-wing-stroke);
+  stroke-width: 1.2;
+  transition: all 0.8s ease;
+}
+
+.body-fill {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.butterfly-body.lit .body-fill {
+  opacity: 1;
+}
+
+.butterfly-body.lit .body-base {
+  stroke: rgba(0, 112, 255, 0.4);
+}
+
+.antenna {
+  fill: none;
+  stroke: var(--grey-wing-stroke);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transition: stroke 0.8s ease;
+}
+
+.antenna-tip {
+  fill: var(--grey-wing-stroke);
+  transition: fill 0.8s ease;
+}
+
+.butterfly-body.lit .antenna {
+  stroke: var(--blue);
+}
+
+.butterfly-body.lit .antenna-tip {
+  fill: var(--blue-light);
+}
+
+/* Butterfly center label */
+.butterfly-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: all 0.8s ease;
+  white-space: nowrap;
+}
+
+.butterfly-label.visible {
+  opacity: 1;
+  color: var(--blue-light);
+}
+
+/* Finale glow */
+.butterfly-svg.glow-pulse {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(0,78,195,0.3)); }
+  50% { filter: drop-shadow(0 0 40px rgba(0,78,195,0.5)) drop-shadow(0 0 80px rgba(0,112,255,0.15)); }
+}
+
+/* ==========================================================================
+   Scroll Sections
+   ========================================================================== */
+
+.scroll-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Pull first section up to overlap the sticky butterfly */
+.scroll-section:first-of-type {
+  margin-top: -100vh;
+}
+
+.section-content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  pointer-events: auto;
+}
+
+.section-content--center {
+  justify-content: center;
+}
+
+.section-content--left {
+  justify-content: flex-start;
+}
+
+.section-content--right {
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   Feature Cards
+   ========================================================================== */
+
+.feature-card {
+  max-width: 380px;
+  padding: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  opacity: 0;
+  transform: translateY(30px);
+  pointer-events: auto;
+}
+
+.feature-card--highlight {
+  border-color: var(--blue-border);
+  background: rgba(0, 78, 195, 0.05);
+}
+
+.feature-card--finale {
+  max-width: 460px;
+  text-align: center;
+  border-color: var(--blue-border);
+  background: rgba(0, 78, 195, 0.06);
+}
+
+.feature-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 12px;
+}
+
+.feature-title {
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.feature-title--large {
+  font-size: clamp(34px, 4vw, 52px);
+  letter-spacing: -1px;
+}
+
+.feature-description {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.feature-audience {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bg-card-border);
+}
+
+.audience-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.audience-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue-light);
+}
+
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feature-tags--centered {
+  justify-content: center;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--blue-light);
+  background: var(--blue-subtle);
+  border: 1px solid var(--blue-border);
+  border-radius: 100px;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+  padding: 80px 40px;
+  text-align: center;
+  border-top: 1px solid var(--bg-card-border);
+}
+
+.footer-brand {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.footer-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .timeline { right: 14px; }
+  .timeline-dot span { display: none; }
+
+  .section-content--left,
+  .section-content--right {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline { display: none; }
+
+  .butterfly-svg {
+    width: clamp(200px, 55vw, 280px);
+  }
+
+  .section-content {
+    padding: 0 20px;
+  }
+
+  .feature-card {
+    max-width: 100%;
+    padding: 24px;
+  }
+
+  .hero-title {
+    letter-spacing: -2px;
+  }
+}
