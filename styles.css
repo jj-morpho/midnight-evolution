@@ -225,7 +225,7 @@ body {
 }
 
 .butterfly-svg {
-  width: clamp(280px, 40vw, 480px);
+  width: clamp(320px, 48vw, 560px);
   height: auto;
   transition: filter 0.8s ease;
 }
