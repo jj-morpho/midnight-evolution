@@ -8,14 +8,17 @@ gsap.registerPlugin(ScrollTrigger);
 /* --- DOM refs --- */
 const svg         = document.querySelector('.butterfly-svg');
 const label       = document.querySelector('.butterfly-label');
-const body        = document.querySelector('.butterfly-body');
+const bBody       = document.querySelector('.butterfly-body');
 const timeline    = document.querySelector('.timeline');
 const fill        = document.querySelector('.timeline-fill');
 const dots        = document.querySelectorAll('.timeline-dot');
 const sections    = document.querySelectorAll('.scroll-section');
+const wingLabels  = document.querySelectorAll('.wing-label');
 
 /* Wing index → CSS selector */
 const WINGS = { 1: '.wing-tl', 2: '.wing-tr', 3: '.wing-bl', 4: '.wing-br' };
+/* Wing index → wing-label data attribute */
+const WING_LABELS = { 1: 'tl', 2: 'tr', 3: 'bl', 4: 'br' };
 const litWings = new Set();
 
 /* =======================================================================
@@ -52,32 +55,46 @@ ScrollTrigger.create({
    ======================================================================= */
 
 function updateTimeline(idx) {
-  const pct = ((idx + 1) / 6) * 100;
+  const pct = Math.max(0, ((idx + 1) / 6) * 100);
   fill.style.height = pct + '%';
-  dots.forEach((d, i) => d.classList.toggle('active', i <= idx));
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i <= idx);
+    /* Only the current section gets 'current' highlight */
+    d.classList.toggle('current', i === idx);
+  });
 }
 
-function lightWing(sel) {
+function lightWing(sel, idx) {
   if (litWings.has(sel)) return;
   litWings.add(sel);
   const wing = document.querySelector(sel);
   if (!wing) return;
   wing.classList.add('lit');
-  /* Animate fill from 0 → 1 with a slight scale pop */
   const wingFill = wing.querySelector('.wing-fill');
-  gsap.fromTo(wingFill,
-    { opacity: 0 },
-    { opacity: 1, duration: 1.0, ease: 'power2.out' }
-  );
+  gsap.fromTo(wingFill, { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power2.out' });
+
+  /* Show the persistent wing label */
+  const labelKey = WING_LABELS[idx];
+  if (labelKey) {
+    const wl = document.querySelector(`[data-wing-label="${labelKey}"]`);
+    if (wl) wl.classList.add('visible');
+  }
 }
 
-function dimWing(sel) {
+function dimWing(sel, idx) {
   if (!litWings.has(sel)) return;
   litWings.delete(sel);
   const wing = document.querySelector(sel);
   if (!wing) return;
   wing.classList.remove('lit');
   gsap.to(wing.querySelector('.wing-fill'), { opacity: 0, duration: 0.5 });
+
+  /* Hide the wing label */
+  const labelKey = WING_LABELS[idx];
+  if (labelKey) {
+    const wl = document.querySelector(`[data-wing-label="${labelKey}"]`);
+    if (wl) wl.classList.remove('visible');
+  }
 }
 
 /* =======================================================================
@@ -105,15 +122,18 @@ sections.forEach((section) => {
 
       /* Section 0 → light the body */
       if (idx === 0) {
-        body.classList.add('lit');
+        bBody.classList.add('lit');
         label.classList.add('visible');
       }
 
-      /* Light the wing */
-      if (WINGS[idx]) lightWing(WINGS[idx]);
+      /* Light the wing + show its persistent label */
+      if (WINGS[idx]) lightWing(WINGS[idx], idx);
 
-      /* Finale glow */
-      if (idx === 5) svg.classList.add('glow-pulse');
+      /* Finale: glow + sunrise */
+      if (idx === 5) {
+        svg.classList.add('glow-pulse');
+        document.body.classList.add('sunrise');
+      }
 
       updateTimeline(idx);
     },
@@ -123,12 +143,18 @@ sections.forEach((section) => {
       gsap.to(card, { opacity: 0, y: 30, x: xFrom, duration: 0.4, ease: 'power2.in' });
 
       if (idx === 0) {
-        body.classList.remove('lit');
+        bBody.classList.remove('lit');
         label.classList.remove('visible');
       }
 
-      if (WINGS[idx]) dimWing(WINGS[idx]);
-      if (idx === 5) svg.classList.remove('glow-pulse');
+      /* Dim wing + hide its label */
+      if (WINGS[idx]) dimWing(WINGS[idx], idx);
+
+      /* Remove finale effects */
+      if (idx === 5) {
+        svg.classList.remove('glow-pulse');
+        document.body.classList.remove('sunrise');
+      }
 
       updateTimeline(idx - 1);
     },
@@ -143,7 +169,6 @@ sections.forEach((section) => {
    Starts at 0.55x scale and grows to 1.15x by the finale
    ======================================================================= */
 
-/* Set initial small scale */
 gsap.set(svg, { scale: 0.55 });
 
 ScrollTrigger.create({
@@ -152,7 +177,6 @@ ScrollTrigger.create({
   end: 'bottom bottom',
   scrub: 1.2,
   onUpdate: (self) => {
-    /* 0.55 → 1.15  (doubles in apparent area) */
     const s = 0.55 + self.progress * 0.6;
     gsap.set(svg, { scale: s });
   },

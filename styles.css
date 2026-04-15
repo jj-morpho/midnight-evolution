@@ -117,13 +117,18 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--text-muted);
-  opacity: 0;
-  transition: all 0.3s ease;
+  opacity: 1;
+  transition: all 0.4s ease;
 }
 
 .timeline-dot.active span {
   opacity: 1;
-  color: var(--text-dim);
+  color: var(--text);
+}
+
+/* Highlight the CURRENT section's label more brightly */
+.timeline-dot.current span {
+  color: var(--blue-light);
 }
 
 /* ==========================================================================
@@ -323,6 +328,81 @@ body {
 .butterfly-label.visible {
   opacity: 1;
   color: var(--blue-light);
+}
+
+/* ==========================================================================
+   Persistent wing labels
+   ========================================================================== */
+
+.wing-label {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.8s ease, transform 0.8s ease, color 0.8s ease;
+  pointer-events: none;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.wing-label.visible {
+  opacity: 1;
+  transform: translateY(0);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Position each label near its wing */
+.wing-label--tl { top: 30%; left: 18%; }
+.wing-label--tr { top: 30%; right: 18%; }
+.wing-label--bl { bottom: 26%; left: 18%; }
+.wing-label--br { bottom: 26%; right: 18%; }
+
+/* ==========================================================================
+   Sunrise background effect (finale)
+   ========================================================================== */
+
+body {
+  transition: background 1.5s ease;
+}
+
+body.sunrise {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 80%,
+    rgba(0, 78, 195, 0.15) 0%,
+    rgba(0, 50, 140, 0.08) 30%,
+    #050510 70%
+  );
+}
+
+/* Sunrise glow layer behind butterfly */
+.butterfly-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 112, 255, 0.2) 0%,
+    rgba(0, 78, 195, 0.1) 40%,
+    transparent 70%
+  );
+  transition: width 1.5s ease, height 1.5s ease, opacity 1.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.sunrise .butterfly-wrap::before {
+  width: 140vw;
+  height: 140vh;
+  opacity: 1;
 }
 
 /* Finale glow */
