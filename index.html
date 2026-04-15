@@ -4,28 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Morpho Midnight — Evolution</title>
-  <meta name="description" content="The evolution of onchain credit. Fixed-rate, fixed-term lending — the full term structure of credit, onchain for the first time.">
+  <meta name="description" content="The evolution of onchain credit. Watch Morpho Midnight grow from core protocol to global credit infrastructure.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <!-- Progress timeline -->
-  <nav class="timeline" aria-label="Scroll progress">
-    <div class="timeline-track">
-      <div class="timeline-fill"></div>
-    </div>
-    <div class="timeline-dots">
-      <div class="timeline-dot active" data-section="0"><span>Launch</span></div>
-      <div class="timeline-dot" data-section="1"><span>Callbacks</span></div>
-      <div class="timeline-dot" data-section="2"><span>Auto-rolling</span></div>
-      <div class="timeline-dot" data-section="3"><span>Vault Adapter</span></div>
-      <div class="timeline-dot" data-section="4"><span>Institutional</span></div>
-      <div class="timeline-dot" data-section="5"><span>$200T</span></div>
-    </div>
-  </nav>
 
   <!-- Hero -->
   <section class="hero" id="hero">
@@ -35,237 +20,125 @@
       <p class="hero-subtitle">The evolution of onchain credit</p>
       <div class="scroll-indicator">
         <span>Scroll to explore the rollout</span>
-        <div class="scroll-arrow">
-          <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-            <path d="M8 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
+        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+          <path d="M8 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
       </div>
     </div>
   </section>
 
-  <!-- Butterfly + Scroll Sections -->
-  <div class="evolution-container" id="evolution">
+  <!-- Horizontal scroll timeline -->
+  <section class="timeline-section" id="timeline-section">
+    <div class="timeline-track">
 
-    <!-- Sticky butterfly layer -->
-    <div class="butterfly-wrap">
-      <svg class="butterfly-svg" viewBox="0 0 1000 900" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="grad-tl" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#003A92"/>
-            <stop offset="100%" stop-color="#0070FF"/>
-          </linearGradient>
-          <linearGradient id="grad-tr" x1="100%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stop-color="#003A92"/>
-            <stop offset="100%" stop-color="#0070FF"/>
-          </linearGradient>
-          <linearGradient id="grad-bl" x1="20%" y1="0%" x2="80%" y2="100%">
-            <stop offset="0%" stop-color="#003080"/>
-            <stop offset="100%" stop-color="#0060DD"/>
-          </linearGradient>
-          <linearGradient id="grad-br" x1="80%" y1="0%" x2="20%" y2="100%">
-            <stop offset="0%" stop-color="#003080"/>
-            <stop offset="100%" stop-color="#0060DD"/>
-          </linearGradient>
-          <linearGradient id="grad-body" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stop-color="#0070FF"/>
-            <stop offset="100%" stop-color="#003A92"/>
-          </linearGradient>
-        </defs>
-
-        <!-- Upper-left wing (Callbacks) — wide, organic, rounded blob -->
-        <g class="wing wing-tl" data-wing="tl">
-          <path class="wing-base" d="
-            M 480 395
-            C 450 340, 380 240, 280 160
-            C 200 100, 120 55, 65 40
-            C 25 28, 5 45, 5 80
-            C 5 130, 40 210, 100 290
-            C 175 380, 300 415, 400 418
-            C 440 418, 468 410, 480 402
-            Z"/>
-          <path class="wing-fill" d="
-            M 480 395
-            C 450 340, 380 240, 280 160
-            C 200 100, 120 55, 65 40
-            C 25 28, 5 45, 5 80
-            C 5 130, 40 210, 100 290
-            C 175 380, 300 415, 400 418
-            C 440 418, 468 410, 480 402
-            Z" fill="url(#grad-tl)"/>
-          <path class="wing-vein" d="M 465 400 C 340 320, 190 190, 30 70"/>
-          <path class="wing-vein" d="M 440 390 C 310 310, 170 210, 20 130"/>
-        </g>
-
-        <!-- Upper-right wing (Auto-rolling) — mirror -->
-        <g class="wing wing-tr" data-wing="tr">
-          <path class="wing-base" d="
-            M 520 395
-            C 550 340, 620 240, 720 160
-            C 800 100, 880 55, 935 40
-            C 975 28, 995 45, 995 80
-            C 995 130, 960 210, 900 290
-            C 825 380, 700 415, 600 418
-            C 560 418, 532 410, 520 402
-            Z"/>
-          <path class="wing-fill" d="
-            M 520 395
-            C 550 340, 620 240, 720 160
-            C 800 100, 880 55, 935 40
-            C 975 28, 995 45, 995 80
-            C 995 130, 960 210, 900 290
-            C 825 380, 700 415, 600 418
-            C 560 418, 532 410, 520 402
-            Z" fill="url(#grad-tr)"/>
-          <path class="wing-vein" d="M 535 400 C 660 320, 810 190, 970 70"/>
-          <path class="wing-vein" d="M 560 390 C 690 310, 830 210, 980 130"/>
-        </g>
-
-        <!-- Lower-left wing (Vault Adapter) — wide rounded blob -->
-        <g class="wing wing-bl" data-wing="bl">
-          <path class="wing-base" d="
-            M 480 465
-            C 450 510, 370 600, 270 690
-            C 190 755, 110 810, 60 840
-            C 25 862, 5 855, 8 825
-            C 12 790, 50 720, 115 645
-            C 200 555, 330 490, 420 468
-            C 455 462, 472 462, 480 462
-            Z"/>
-          <path class="wing-fill" d="
-            M 480 465
-            C 450 510, 370 600, 270 690
-            C 190 755, 110 810, 60 840
-            C 25 862, 5 855, 8 825
-            C 12 790, 50 720, 115 645
-            C 200 555, 330 490, 420 468
-            C 455 462, 472 462, 480 462
-            Z" fill="url(#grad-bl)"/>
-          <path class="wing-vein" d="M 470 468 C 350 540, 190 680, 30 830"/>
-          <path class="wing-vein" d="M 450 478 C 330 545, 185 670, 55 800"/>
-        </g>
-
-        <!-- Lower-right wing (Institutional) — mirror -->
-        <g class="wing wing-br" data-wing="br">
-          <path class="wing-base" d="
-            M 520 465
-            C 550 510, 630 600, 730 690
-            C 810 755, 890 810, 940 840
-            C 975 862, 995 855, 992 825
-            C 988 790, 950 720, 885 645
-            C 800 555, 670 490, 580 468
-            C 545 462, 528 462, 520 462
-            Z"/>
-          <path class="wing-fill" d="
-            M 520 465
-            C 550 510, 630 600, 730 690
-            C 810 755, 890 810, 940 840
-            C 975 862, 995 855, 992 825
-            C 988 790, 950 720, 885 645
-            C 800 555, 670 490, 580 468
-            C 545 462, 528 462, 520 462
-            Z" fill="url(#grad-br)"/>
-          <path class="wing-vein" d="M 530 468 C 650 540, 810 680, 970 830"/>
-          <path class="wing-vein" d="M 550 478 C 670 545, 815 670, 945 800"/>
-        </g>
-
-        <!-- Body -->
-        <g class="butterfly-body">
-          <ellipse class="body-base" cx="500" cy="430" rx="18" ry="50"/>
-          <ellipse class="body-fill" cx="500" cy="430" rx="18" ry="50" fill="url(#grad-body)"/>
-          <!-- Antennae -->
-          <path class="antenna" d="M 493 382 C 472 330, 430 280, 395 255"/>
-          <circle class="antenna-tip" cx="395" cy="255" r="4"/>
-          <path class="antenna" d="M 507 382 C 528 330, 570 280, 605 255"/>
-          <circle class="antenna-tip" cx="605" cy="255" r="4"/>
-        </g>
-      </svg>
-
-      <!-- Center label -->
-      <div class="butterfly-label">Midnight</div>
-
-      <!-- Sticky feature cards (positioned around the butterfly, revealed on scroll) -->
-      <div class="sticky-card sticky-card--tl" data-sticky="1">
-        <p class="sc-eyebrow">Callbacks</p>
-        <p class="sc-desc">Compose Midnight into more sophisticated products. No idle capital, ever.</p>
-        <p class="sc-audience">Integrators & Power Curators</p>
+      <!-- Progress bar along the bottom -->
+      <div class="track-line">
+        <div class="track-line-fill"></div>
       </div>
 
-      <div class="sticky-card sticky-card--tr" data-sticky="2">
-        <p class="sc-eyebrow">Auto-Rolling</p>
-        <p class="sc-desc">Positions behave like a continuous product, not a one-shot trade.</p>
-        <p class="sc-audience">End Users & Vault Curators</p>
-      </div>
+      <!-- Feature blocks (appear progressively) -->
+      <div class="features">
 
-      <div class="sticky-card sticky-card--bl" data-sticky="3">
-        <p class="sc-eyebrow">Vault Adapter</p>
-        <p class="sc-desc">Billions of vault liquidity can now route into fixed-rate markets.</p>
-        <p class="sc-audience">The Second Launch</p>
-      </div>
+        <!-- 0: Core Protocol — always visible once we enter -->
+        <div class="feature-block feature-block--core" data-feature="0">
+          <div class="feature-block-inner">
+            <div class="fb-badge">Core Protocol</div>
+            <h2 class="fb-title">Morpho<br>Midnight</h2>
+            <p class="fb-desc">
+              Fixed-rate, fixed-term lending. The full term structure of credit, onchain for the first time.
+            </p>
+            <div class="fb-tags">
+              <span class="fb-tag">Immutable</span>
+              <span class="fb-tag">Permissionless</span>
+              <span class="fb-tag">Direct lending</span>
+            </div>
+          </div>
+        </div>
 
-      <div class="sticky-card sticky-card--br" data-sticky="4">
-        <p class="sc-eyebrow">Institutional</p>
-        <p class="sc-desc">A named institution goes live on Midnight for the exact use case from day one.</p>
-        <p class="sc-audience">Institutional adoption is real</p>
+        <!-- + connector -->
+        <div class="connector" data-after="0">
+          <div class="connector-line"></div>
+          <div class="connector-plus">+</div>
+        </div>
+
+        <!-- 1: Callbacks -->
+        <div class="feature-block" data-feature="1">
+          <div class="feature-block-inner">
+            <div class="fb-badge">Evolution 01</div>
+            <h2 class="fb-title">Callbacks</h2>
+            <p class="fb-desc">
+              Compose Midnight into more sophisticated products. Lend offers against capital already earning yield — no idle capital, ever.
+            </p>
+            <p class="fb-audience">For integrators & power curators</p>
+          </div>
+        </div>
+
+        <div class="connector" data-after="1">
+          <div class="connector-line"></div>
+          <div class="connector-plus">+</div>
+        </div>
+
+        <!-- 2: Auto-rolling -->
+        <div class="feature-block" data-feature="2">
+          <div class="feature-block-inner">
+            <div class="fb-badge">Evolution 02</div>
+            <h2 class="fb-title">Auto-Rolling</h2>
+            <p class="fb-desc">
+              Positions behave like a continuous product, not a one-shot trade. Capital stays productive across terms automatically.
+            </p>
+            <p class="fb-audience">For end users & vault curators</p>
+          </div>
+        </div>
+
+        <div class="connector" data-after="2">
+          <div class="connector-line"></div>
+          <div class="connector-plus">+</div>
+        </div>
+
+        <!-- 3: Midnight Adapters -->
+        <div class="feature-block feature-block--highlight" data-feature="3">
+          <div class="feature-block-inner">
+            <div class="fb-badge fb-badge--highlight">The Second Launch</div>
+            <h2 class="fb-title">Midnight<br>Adapters</h2>
+            <p class="fb-desc">
+              Added to the vault registry. Billions of vault liquidity can now route into fixed-rate markets. This is the moment Midnight scales.
+            </p>
+            <p class="fb-audience">Unlocks $1B+ vault liquidity</p>
+          </div>
+        </div>
+
       </div>
     </div>
+  </section>
 
-    <!-- Scroll sections (create scrollable height & trigger reveals) -->
-
-    <!-- Section 0: Core Protocol Launch -->
-    <section class="scroll-section" data-section="0" id="section-core">
-      <div class="section-content section-content--center">
-        <div class="feature-card" data-side="center">
-          <p class="feature-eyebrow">Day One</p>
-          <h2 class="feature-title">The Core Protocol</h2>
-          <p class="feature-description">
-            Fixed-rate, fixed-term lending. The full term structure of credit,
-            onchain for the first time. Direct lending only — security before surface area.
-          </p>
-          <div class="feature-tags">
-            <span class="tag">Immutable</span>
-            <span class="tag">Permissionless</span>
-            <span class="tag">Obligation-based</span>
-          </div>
-        </div>
+  <!-- Full-screen finale: Global Credit Market -->
+  <section class="finale" id="finale">
+    <div class="finale-bg"></div>
+    <div class="finale-content">
+      <p class="finale-eyebrow">The Vision</p>
+      <h2 class="finale-title">Addressing the<br>Global Credit Market</h2>
+      <p class="finale-desc">
+        Onchain lending today captures a fraction of what it could. Fixed rates are the language institutions speak — the foundation of every serious credit market in the world. Midnight makes them available onchain, at scale.
+      </p>
+      <div class="finale-stat">
+        <span class="finale-number">$200T</span>
+        <span class="finale-label">of global credit, now reachable</span>
       </div>
-    </section>
-
-    <!-- Sections 1–4: empty triggers (cards are in sticky wrapper above) -->
-    <section class="scroll-section" data-section="1" id="section-callbacks"></section>
-    <section class="scroll-section" data-section="2" id="section-autorolling"></section>
-    <section class="scroll-section" data-section="3" id="section-vaults"></section>
-    <section class="scroll-section" data-section="4" id="section-institutional"></section>
-
-    <!-- Section 5: Finale — $200T -->
-    <section class="scroll-section scroll-section--finale" data-section="5" id="section-finale">
-      <div class="section-content section-content--center">
-        <div class="feature-card feature-card--finale" data-side="center">
-          <p class="feature-eyebrow">The Vision Realized</p>
-          <h2 class="feature-title feature-title--large">The $200T Story</h2>
-          <p class="feature-description">
-            RWA. Receivables. Private credit. Non-crypto-backed loan types
-            flowing through Midnight. The infrastructure for global credit
-            is no longer theoretical.
-          </p>
-          <div class="feature-tags feature-tags--centered">
-            <span class="tag">Private Credit</span>
-            <span class="tag">RWA</span>
-            <span class="tag">Receivables</span>
-            <span class="tag">Corporate Bonds</span>
-          </div>
-        </div>
+      <div class="finale-tags">
+        <span class="finale-tag">Private Credit</span>
+        <span class="finale-tag">RWA</span>
+        <span class="finale-tag">Receivables</span>
+        <span class="finale-tag">Corporate Bonds</span>
+        <span class="finale-tag">Mortgages</span>
+        <span class="finale-tag">Government Bonds</span>
       </div>
-    </section>
-
-  </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-inner">
-      <p class="footer-brand">Morpho Midnight</p>
-      <p class="footer-tagline">The open credit network for the world</p>
-    </div>
+    <p class="footer-brand">Morpho Midnight</p>
+    <p class="footer-tagline">The open credit network for the world</p>
   </footer>
 
   <script src="gsap.min.js"></script>

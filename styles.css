@@ -1,6 +1,5 @@
 /* ==========================================================================
-   Morpho Midnight Evolution
-   Brand: #004EC3 (Morpho Blue), deep midnight dark theme
+   Morpho Midnight Evolution — Horizontal Timeline
    ========================================================================== */
 
 *, *::before, *::after {
@@ -14,15 +13,14 @@
   --blue-light: #0070FF;
   --blue-glow: rgba(0, 78, 195, 0.35);
   --blue-subtle: rgba(0, 78, 195, 0.08);
-  --blue-border: rgba(0, 78, 195, 0.18);
+  --blue-border: rgba(0, 78, 195, 0.22);
+  --dawn: #C4DAFF;
   --bg: #050510;
-  --bg-card: rgba(10, 10, 30, 0.85);
-  --bg-card-border: rgba(255, 255, 255, 0.06);
+  --bg-card: rgba(10, 10, 30, 0.8);
+  --bg-card-border: rgba(255, 255, 255, 0.07);
   --text: #FFFFFF;
   --text-dim: #9090AA;
   --text-muted: #505068;
-  --grey-wing: #12122A;
-  --grey-wing-stroke: #1E1E40;
   --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
 }
 
@@ -37,98 +35,6 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
-}
-
-/* ==========================================================================
-   Timeline (fixed right side)
-   ========================================================================== */
-
-.timeline {
-  position: fixed;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 200;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-.timeline.visible {
-  opacity: 1;
-}
-
-.timeline-track {
-  width: 2px;
-  height: 200px;
-  background: var(--grey-wing);
-  border-radius: 1px;
-  position: relative;
-  margin-left: 4px;
-}
-
-.timeline-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0%;
-  background: var(--blue);
-  border-radius: 1px;
-  transition: height 0.5s ease;
-  box-shadow: 0 0 8px var(--blue-glow);
-}
-
-.timeline-dots {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.timeline-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--grey-wing);
-  border: 1.5px solid var(--grey-wing-stroke);
-  transition: all 0.4s ease;
-  position: relative;
-}
-
-.timeline-dot.active {
-  background: var(--blue);
-  border-color: var(--blue);
-  box-shadow: 0 0 10px var(--blue-glow);
-}
-
-.timeline-dot span {
-  position: absolute;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  opacity: 1;
-  transition: all 0.4s ease;
-}
-
-.timeline-dot.active span {
-  opacity: 1;
-  color: var(--text);
-}
-
-/* Highlight the CURRENT section's label more brightly */
-.timeline-dot.current span {
-  color: var(--blue-light);
 }
 
 /* ==========================================================================
@@ -189,6 +95,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  color: var(--text-muted);
 }
 
 .scroll-indicator span {
@@ -196,10 +103,9 @@ body {
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--text-muted);
 }
 
-.scroll-arrow {
+.scroll-indicator svg {
   color: var(--blue);
   animation: bounce 2.5s ease-in-out infinite;
 }
@@ -210,428 +116,304 @@ body {
 }
 
 /* ==========================================================================
-   Evolution Container & Sticky Butterfly
+   Horizontal Timeline Section (pinned by GSAP)
    ========================================================================== */
 
-.evolution-container {
+.timeline-section {
   position: relative;
+  overflow: hidden;
 }
 
-.butterfly-wrap {
-  position: sticky;
-  top: 0;
+.timeline-track {
+  display: flex;
+  align-items: center;
   height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.butterfly-svg {
-  width: clamp(320px, 48vw, 560px);
-  height: auto;
-  transition: filter 0.8s ease;
-}
-
-/* Wing styles */
-.wing-base {
-  fill: var(--grey-wing);
-  stroke: var(--grey-wing-stroke);
-  stroke-width: 1.2;
-}
-
-.wing-fill {
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-.wing-vein {
-  fill: none;
-  stroke: var(--grey-wing-stroke);
-  stroke-width: 0.8;
-  opacity: 0.4;
-  transition: all 0.8s ease;
-}
-
-.wing.lit .wing-fill {
-  opacity: 1;
-}
-
-.wing.lit .wing-base {
-  stroke: rgba(0, 112, 255, 0.3);
-}
-
-.wing.lit .wing-vein {
-  stroke: rgba(0, 112, 255, 0.2);
-}
-
-/* Body */
-.body-base {
-  fill: var(--grey-wing);
-  stroke: var(--grey-wing-stroke);
-  stroke-width: 1.2;
-  transition: all 0.8s ease;
-}
-
-.body-fill {
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-
-.butterfly-body.lit .body-fill {
-  opacity: 1;
-}
-
-.butterfly-body.lit .body-base {
-  stroke: rgba(0, 112, 255, 0.4);
-}
-
-.antenna {
-  fill: none;
-  stroke: var(--grey-wing-stroke);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  transition: stroke 0.8s ease;
-}
-
-.antenna-tip {
-  fill: var(--grey-wing-stroke);
-  transition: fill 0.8s ease;
-}
-
-.butterfly-body.lit .antenna {
-  stroke: var(--blue);
-}
-
-.butterfly-body.lit .antenna-tip {
-  fill: var(--blue-light);
-}
-
-/* Butterfly center label */
-.butterfly-label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -48%);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  opacity: 0;
-  transition: all 0.8s ease;
-  white-space: nowrap;
-}
-
-.butterfly-label.visible {
-  opacity: 1;
-  color: var(--blue-light);
-}
-
-/* ==========================================================================
-   Sticky feature cards (inside butterfly-wrap, persist once revealed)
-   ========================================================================== */
-
-.sticky-card {
-  position: absolute;
-  width: clamp(220px, 22vw, 300px);
-  padding: 22px 24px;
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: 14px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.4s ease;
-  pointer-events: auto;
-  z-index: 15;
-}
-
-.sticky-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Highlight the currently active card */
-.sticky-card.active {
-  border-color: var(--blue-border);
-  background: rgba(0, 78, 195, 0.06);
-}
-
-/* Positioning: pulled in close to the butterfly */
-.sticky-card--tl { top: 6%;  left: 8%;  }
-.sticky-card--tr { top: 6%;  right: 8%; }
-.sticky-card--bl { bottom: 8%; left: 8%;  }
-.sticky-card--br { bottom: 8%; right: 8%; }
-
-.sc-eyebrow {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.sc-desc {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.65;
-  color: var(--text-dim);
-  margin-bottom: 10px;
-}
-
-.sc-audience {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--blue-light);
-}
-
-/* ==========================================================================
-   Sunrise background effect (finale) — subtle, readable
-   ========================================================================== */
-
-body {
-  transition: background 1.5s ease;
-}
-
-body.sunrise {
-  background: radial-gradient(
-    ellipse 80% 60% at 50% 80%,
-    rgba(196, 218, 255, 0.18) 0%,
-    rgba(196, 218, 255, 0.06) 30%,
-    #050510 65%
-  );
-}
-
-/* Sunrise glow layer behind butterfly */
-.butterfly-wrap::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -40%);
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(196, 218, 255, 0.22) 0%,
-    rgba(196, 218, 255, 0.08) 40%,
-    transparent 70%
-  );
-  transition: width 1.8s ease, height 1.8s ease, opacity 1.8s ease;
-  opacity: 0;
-  pointer-events: none;
-}
-
-body.sunrise .butterfly-wrap::before {
-  width: 130vw;
-  height: 130vh;
-  opacity: 1;
-}
-
-/* Finale glow */
-.butterfly-svg.glow-pulse {
-  animation: pulseGlow 3s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { filter: drop-shadow(0 0 15px rgba(196,218,255,0.25)); }
-  50% { filter: drop-shadow(0 0 40px rgba(196,218,255,0.4)) drop-shadow(0 0 80px rgba(196,218,255,0.12)); }
-}
-
-/* ==========================================================================
-   Wing flap animation (finale)
-   Each wing pair rotates slightly around the body axis to simulate a flap.
-   Upper wings pivot from their base (near center), lower wings mirror.
-   ========================================================================== */
-
-.butterfly-svg.flapping .wing-tl {
-  animation: flapTL 2.4s ease-in-out infinite;
-  transform-origin: 490px 410px;
-}
-.butterfly-svg.flapping .wing-tr {
-  animation: flapTR 2.4s ease-in-out infinite;
-  transform-origin: 510px 410px;
-}
-.butterfly-svg.flapping .wing-bl {
-  animation: flapBL 2.4s ease-in-out infinite;
-  transform-origin: 490px 455px;
-}
-.butterfly-svg.flapping .wing-br {
-  animation: flapBR 2.4s ease-in-out infinite;
-  transform-origin: 510px 455px;
-}
-
-@keyframes flapTL {
-  0%, 100% { transform: rotate(0deg) scaleX(1); }
-  35% { transform: rotate(4deg) scaleX(0.92); }
-  65% { transform: rotate(-2deg) scaleX(1.02); }
-}
-
-@keyframes flapTR {
-  0%, 100% { transform: rotate(0deg) scaleX(1); }
-  35% { transform: rotate(-4deg) scaleX(0.92); }
-  65% { transform: rotate(2deg) scaleX(1.02); }
-}
-
-@keyframes flapBL {
-  0%, 100% { transform: rotate(0deg) scaleX(1); }
-  40% { transform: rotate(-3deg) scaleX(0.94); }
-  70% { transform: rotate(1.5deg) scaleX(1.01); }
-}
-
-@keyframes flapBR {
-  0%, 100% { transform: rotate(0deg) scaleX(1); }
-  40% { transform: rotate(3deg) scaleX(0.94); }
-  70% { transform: rotate(-1.5deg) scaleX(1.01); }
-}
-
-/* ==========================================================================
-   Scroll Sections
-   ========================================================================== */
-
-.scroll-section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+  padding: 0 8vw;
   position: relative;
-  z-index: 10;
+  /* Width set dynamically or via JS, but we need enough room */
+  width: max-content;
+  min-width: 100vw;
 }
 
-/* Pull first section up to overlap the sticky butterfly */
-.scroll-section:first-of-type {
-  margin-top: -100vh;
+/* Bottom progress line */
+.track-line {
+  position: absolute;
+  bottom: 100px;
+  left: 8vw;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.section-content {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: flex;
-  pointer-events: auto;
-}
-
-.section-content--center {
-  justify-content: center;
-}
-
-.section-content--left {
-  justify-content: flex-start;
-}
-
-.section-content--right {
-  justify-content: flex-end;
+.track-line-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--blue);
+  box-shadow: 0 0 12px var(--blue-glow);
+  transition: width 0.1s linear;
 }
 
 /* ==========================================================================
-   Feature Cards
+   Feature blocks
    ========================================================================== */
 
-.feature-card {
-  max-width: 380px;
-  padding: 36px;
+.features {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding-right: 10vw;
+}
+
+.feature-block {
+  flex-shrink: 0;
+  width: clamp(300px, 28vw, 400px);
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.feature-block.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.feature-block-inner {
+  padding: 36px 32px;
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: 16px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  opacity: 0;
-  transform: translateY(30px);
-  pointer-events: auto;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.4s ease, background 0.4s ease;
 }
 
-.feature-card--highlight {
+/* Currently active block */
+.feature-block.active .feature-block-inner {
   border-color: var(--blue-border);
   background: rgba(0, 78, 195, 0.05);
 }
 
-.feature-card--finale {
-  max-width: 460px;
-  text-align: center;
+/* Highlight (Midnight Adapters) */
+.feature-block--highlight.visible .feature-block-inner {
   border-color: var(--blue-border);
-  background: rgba(5, 5, 16, 0.88);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
 }
 
-.feature-eyebrow {
-  font-size: 11px;
+/* Core protocol gets special treatment */
+.feature-block--core .feature-block-inner {
+  background: rgba(0, 78, 195, 0.04);
+  border-color: rgba(0, 78, 195, 0.15);
+}
+
+.fb-badge {
+  display: inline-block;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--blue-light);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-.feature-title {
-  font-size: clamp(28px, 3vw, 38px);
+.fb-badge--highlight {
+  color: var(--dawn);
+}
+
+.fb-title {
+  font-size: clamp(28px, 3vw, 40px);
   font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1.1;
   margin-bottom: 14px;
 }
 
-.feature-title--large {
-  font-size: clamp(34px, 4vw, 52px);
-  letter-spacing: -1px;
-}
-
-.feature-description {
-  font-size: 15px;
+.fb-desc {
+  font-size: 14px;
   font-weight: 300;
   line-height: 1.7;
   color: var(--text-dim);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
-.feature-audience {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-top: 14px;
-  border-top: 1px solid var(--bg-card-border);
-}
-
-.audience-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.audience-value {
-  font-size: 13px;
+.fb-audience {
+  font-size: 12px;
   font-weight: 500;
   color: var(--blue-light);
+  letter-spacing: 0.3px;
 }
 
-.feature-tags {
+.fb-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
-.feature-tags--centered {
-  justify-content: center;
-}
-
-.tag {
+.fb-tag {
   display: inline-block;
-  padding: 5px 12px;
+  padding: 4px 12px;
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.5px;
   color: var(--blue-light);
   background: var(--blue-subtle);
   border: 1px solid var(--blue-border);
+  border-radius: 100px;
+}
+
+/* ==========================================================================
+   Connectors (+ between blocks)
+   ========================================================================== */
+
+.connector {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  width: 80px;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.connector.visible {
+  opacity: 1;
+}
+
+.connector-line {
+  width: 100%;
+  height: 2px;
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+.connector-plus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px var(--blue-glow);
+}
+
+/* ==========================================================================
+   Finale — Full-screen Global Credit Market
+   ========================================================================== */
+
+.finale {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.finale-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 60%,
+    rgba(196, 218, 255, 0.10) 0%,
+    rgba(0, 78, 195, 0.04) 40%,
+    var(--bg) 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.finale.visible .finale-bg {
+  opacity: 1;
+}
+
+.finale-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.finale.visible .finale-content {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+}
+
+.finale-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 20px;
+}
+
+.finale-title {
+  font-size: clamp(40px, 7vw, 80px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+
+.finale-desc {
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin-bottom: 40px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.finale-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.finale-number {
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--blue-light), var(--dawn));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.finale-label {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-dim);
+}
+
+.finale-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.finale-tag {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dawn);
+  background: rgba(196, 218, 255, 0.06);
+  border: 1px solid rgba(196, 218, 255, 0.12);
   border-radius: 100px;
 }
 
@@ -662,33 +444,15 @@ body.sunrise .butterfly-wrap::before {
    Responsive
    ========================================================================== */
 
-@media (max-width: 1024px) {
-  .timeline { right: 14px; }
-  .timeline-dot span { display: none; }
-
-  .section-content--left,
-  .section-content--right {
-    justify-content: center;
-  }
-}
-
 @media (max-width: 768px) {
-  .timeline { display: none; }
-
-  .butterfly-svg {
-    width: clamp(200px, 55vw, 280px);
+  .feature-block {
+    width: clamp(260px, 75vw, 320px);
   }
 
-  .section-content {
-    padding: 0 20px;
-  }
+  .connector { width: 50px; }
 
-  .feature-card {
-    max-width: 100%;
-    padding: 24px;
-  }
-
-  .hero-title {
-    letter-spacing: -2px;
+  .finale-stat {
+    flex-direction: column;
+    gap: 4px;
   }
 }
