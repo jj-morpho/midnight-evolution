@@ -336,11 +336,11 @@ body {
 
 .sticky-card {
   position: absolute;
-  width: clamp(180px, 18vw, 240px);
-  padding: 16px 18px;
+  width: clamp(220px, 22vw, 300px);
+  padding: 22px 24px;
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
-  border-radius: 12px;
+  border-radius: 14px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   opacity: 0;
@@ -361,30 +361,30 @@ body {
   background: rgba(0, 78, 195, 0.06);
 }
 
-/* Positioning: 4 corners around butterfly */
-.sticky-card--tl { top: 8%; left: 3%; }
-.sticky-card--tr { top: 8%; right: 3%; }
-.sticky-card--bl { bottom: 12%; left: 3%; }
-.sticky-card--br { bottom: 12%; right: 3%; }
+/* Positioning: pulled in close to the butterfly */
+.sticky-card--tl { top: 6%;  left: 8%;  }
+.sticky-card--tr { top: 6%;  right: 8%; }
+.sticky-card--bl { bottom: 8%; left: 8%;  }
+.sticky-card--br { bottom: 8%; right: 8%; }
 
 .sc-eyebrow {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   color: var(--text);
-  margin-bottom: 6px;
-}
-
-.sc-desc {
-  font-size: 12px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--text-dim);
   margin-bottom: 8px;
 }
 
+.sc-desc {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
 .sc-audience {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -401,9 +401,9 @@ body {
 
 body.sunrise {
   background: radial-gradient(
-    ellipse 70% 50% at 50% 85%,
-    rgba(0, 78, 195, 0.10) 0%,
-    rgba(0, 40, 120, 0.05) 35%,
+    ellipse 80% 60% at 50% 80%,
+    rgba(196, 218, 255, 0.18) 0%,
+    rgba(196, 218, 255, 0.06) 30%,
     #050510 65%
   );
 }
@@ -414,24 +414,24 @@ body.sunrise {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%);
   width: 0;
   height: 0;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(0, 112, 255, 0.12) 0%,
-    rgba(0, 78, 195, 0.06) 40%,
+    rgba(196, 218, 255, 0.22) 0%,
+    rgba(196, 218, 255, 0.08) 40%,
     transparent 70%
   );
-  transition: width 1.5s ease, height 1.5s ease, opacity 1.5s ease;
+  transition: width 1.8s ease, height 1.8s ease, opacity 1.8s ease;
   opacity: 0;
   pointer-events: none;
 }
 
 body.sunrise .butterfly-wrap::before {
-  width: 120vw;
-  height: 120vh;
+  width: 130vw;
+  height: 130vh;
   opacity: 1;
 }
 
@@ -441,8 +441,55 @@ body.sunrise .butterfly-wrap::before {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { filter: drop-shadow(0 0 15px rgba(0,78,195,0.3)); }
-  50% { filter: drop-shadow(0 0 40px rgba(0,78,195,0.5)) drop-shadow(0 0 80px rgba(0,112,255,0.15)); }
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(196,218,255,0.25)); }
+  50% { filter: drop-shadow(0 0 40px rgba(196,218,255,0.4)) drop-shadow(0 0 80px rgba(196,218,255,0.12)); }
+}
+
+/* ==========================================================================
+   Wing flap animation (finale)
+   Each wing pair rotates slightly around the body axis to simulate a flap.
+   Upper wings pivot from their base (near center), lower wings mirror.
+   ========================================================================== */
+
+.butterfly-svg.flapping .wing-tl {
+  animation: flapTL 2.4s ease-in-out infinite;
+  transform-origin: 490px 410px;
+}
+.butterfly-svg.flapping .wing-tr {
+  animation: flapTR 2.4s ease-in-out infinite;
+  transform-origin: 510px 410px;
+}
+.butterfly-svg.flapping .wing-bl {
+  animation: flapBL 2.4s ease-in-out infinite;
+  transform-origin: 490px 455px;
+}
+.butterfly-svg.flapping .wing-br {
+  animation: flapBR 2.4s ease-in-out infinite;
+  transform-origin: 510px 455px;
+}
+
+@keyframes flapTL {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  35% { transform: rotate(4deg) scaleX(0.92); }
+  65% { transform: rotate(-2deg) scaleX(1.02); }
+}
+
+@keyframes flapTR {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  35% { transform: rotate(-4deg) scaleX(0.92); }
+  65% { transform: rotate(2deg) scaleX(1.02); }
+}
+
+@keyframes flapBL {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  40% { transform: rotate(-3deg) scaleX(0.94); }
+  70% { transform: rotate(1.5deg) scaleX(1.01); }
+}
+
+@keyframes flapBR {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  40% { transform: rotate(3deg) scaleX(0.94); }
+  70% { transform: rotate(-1.5deg) scaleX(1.01); }
 }
 
 /* ==========================================================================

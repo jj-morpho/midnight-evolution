@@ -145,9 +145,10 @@ sections.forEach((section) => {
       /* Highlight current sticky card */
       highlightStickyCard(idx);
 
-      /* Finale: glow + sunrise */
+      /* Finale: glow + sunrise + wing flap */
       if (idx === 5) {
         svg.classList.add('glow-pulse');
+        svg.classList.add('flapping');
         document.body.classList.add('sunrise');
       }
 
@@ -173,6 +174,7 @@ sections.forEach((section) => {
 
       if (idx === 5) {
         svg.classList.remove('glow-pulse');
+        svg.classList.remove('flapping');
         document.body.classList.remove('sunrise');
       }
 
