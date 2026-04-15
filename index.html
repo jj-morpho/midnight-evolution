@@ -184,14 +184,33 @@
       <!-- Center label -->
       <div class="butterfly-label">Midnight</div>
 
-      <!-- Persistent wing labels (appear when wing lights up, stay visible) -->
-      <div class="wing-label wing-label--tl" data-wing-label="tl">Callbacks</div>
-      <div class="wing-label wing-label--tr" data-wing-label="tr">Auto-Roll</div>
-      <div class="wing-label wing-label--bl" data-wing-label="bl">Midnight<br>Adapter</div>
-      <div class="wing-label wing-label--br" data-wing-label="br">Institutional<br>Adoption</div>
+      <!-- Sticky feature cards (positioned around the butterfly, revealed on scroll) -->
+      <div class="sticky-card sticky-card--tl" data-sticky="1">
+        <p class="sc-eyebrow">Callbacks</p>
+        <p class="sc-desc">Compose Midnight into more sophisticated products. No idle capital, ever.</p>
+        <p class="sc-audience">Integrators & Power Curators</p>
+      </div>
+
+      <div class="sticky-card sticky-card--tr" data-sticky="2">
+        <p class="sc-eyebrow">Auto-Rolling</p>
+        <p class="sc-desc">Positions behave like a continuous product, not a one-shot trade.</p>
+        <p class="sc-audience">End Users & Vault Curators</p>
+      </div>
+
+      <div class="sticky-card sticky-card--bl" data-sticky="3">
+        <p class="sc-eyebrow">Vault Adapter</p>
+        <p class="sc-desc">Billions of vault liquidity can now route into fixed-rate markets.</p>
+        <p class="sc-audience">The Second Launch</p>
+      </div>
+
+      <div class="sticky-card sticky-card--br" data-sticky="4">
+        <p class="sc-eyebrow">Institutional</p>
+        <p class="sc-desc">A named institution goes live on Midnight for the exact use case from day one.</p>
+        <p class="sc-audience">Institutional adoption is real</p>
+      </div>
     </div>
 
-    <!-- Scroll sections (these create the scrollable height) -->
+    <!-- Scroll sections (create scrollable height & trigger reveals) -->
 
     <!-- Section 0: Core Protocol Launch -->
     <section class="scroll-section" data-section="0" id="section-core">
@@ -212,80 +231,11 @@
       </div>
     </section>
 
-    <!-- Section 1: Callbacks — Top-left wing -->
-    <section class="scroll-section" data-section="1" id="section-callbacks">
-      <div class="section-content section-content--left">
-        <div class="feature-card" data-side="left">
-          <p class="feature-eyebrow">Evolution 01</p>
-          <h2 class="feature-title">Callbacks</h2>
-          <p class="feature-description">
-            Builders can now compose Midnight into more sophisticated products.
-            Lend offers against capital already earning yield in Morpho Vaults —
-            no idle capital, ever.
-          </p>
-          <div class="feature-audience">
-            <span class="audience-label">Built for</span>
-            <span class="audience-value">Integrators & Power Curators</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: Auto-rolling — Top-right wing -->
-    <section class="scroll-section" data-section="2" id="section-autorolling">
-      <div class="section-content section-content--right">
-        <div class="feature-card" data-side="right">
-          <p class="feature-eyebrow">Evolution 02</p>
-          <h2 class="feature-title">Auto-Rolling</h2>
-          <p class="feature-description">
-            Midnight positions now behave like a continuous product, not a one-shot trade.
-            No manual rollovers — capital stays productive across terms automatically.
-          </p>
-          <div class="feature-audience">
-            <span class="audience-label">Built for</span>
-            <span class="audience-value">End Users & Vault Curators</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Vault Adapter — Bottom-left wing -->
-    <section class="scroll-section" data-section="3" id="section-vaults">
-      <div class="section-content section-content--left">
-        <div class="feature-card feature-card--highlight" data-side="left">
-          <p class="feature-eyebrow">Evolution 03 — The Second Launch</p>
-          <h2 class="feature-title">Vault Adapter</h2>
-          <p class="feature-description">
-            The Midnight adapter is added to the vault registry.
-            Billions of vault liquidity can now route into fixed-rate markets.
-            This is the moment Midnight scales.
-          </p>
-          <div class="feature-audience">
-            <span class="audience-label">Unlocks</span>
-            <span class="audience-value">$1B+ vault liquidity into fixed-rate</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4: Institutional — Bottom-right wing -->
-    <section class="scroll-section" data-section="4" id="section-institutional">
-      <div class="section-content section-content--right">
-        <div class="feature-card" data-side="right">
-          <p class="feature-eyebrow">Evolution 04</p>
-          <h2 class="feature-title">Institutional<br>Deployment</h2>
-          <p class="feature-description">
-            A named institution goes live on Midnight for the exact use case
-            described on day one. The thesis is playing out.
-            Institutional credit is moving onchain.
-          </p>
-          <div class="feature-audience">
-            <span class="audience-label">Signal</span>
-            <span class="audience-value">Institutional adoption is real</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Sections 1–4: empty triggers (cards are in sticky wrapper above) -->
+    <section class="scroll-section" data-section="1" id="section-callbacks"></section>
+    <section class="scroll-section" data-section="2" id="section-autorolling"></section>
+    <section class="scroll-section" data-section="3" id="section-vaults"></section>
+    <section class="scroll-section" data-section="4" id="section-institutional"></section>
 
     <!-- Section 5: Finale — $200T -->
     <section class="scroll-section scroll-section--finale" data-section="5" id="section-finale">

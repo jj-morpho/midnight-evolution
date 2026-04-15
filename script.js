@@ -13,13 +13,14 @@ const timeline    = document.querySelector('.timeline');
 const fill        = document.querySelector('.timeline-fill');
 const dots        = document.querySelectorAll('.timeline-dot');
 const sections    = document.querySelectorAll('.scroll-section');
-const wingLabels  = document.querySelectorAll('.wing-label');
+const stickyCards = document.querySelectorAll('.sticky-card');
 
 /* Wing index → CSS selector */
 const WINGS = { 1: '.wing-tl', 2: '.wing-tr', 3: '.wing-bl', 4: '.wing-br' };
-/* Wing index → wing-label data attribute */
-const WING_LABELS = { 1: 'tl', 2: 'tr', 3: 'bl', 4: 'br' };
 const litWings = new Set();
+
+/* Track current section for "active" highlight */
+let currentSection = -1;
 
 /* =======================================================================
    Hero entrance
@@ -29,7 +30,6 @@ gsap.from('.hero-title',   { opacity: 0, y: 30, duration: 0.9, delay: 0.5, ease:
 gsap.from('.hero-subtitle',{ opacity: 0, y: 20, duration: 0.8, delay: 0.7, ease: 'power3.out' });
 gsap.from('.scroll-indicator', { opacity: 0, y: 15, duration: 0.8, delay: 1.0, ease: 'power3.out' });
 
-/* Hide scroll indicator once user scrolls past hero */
 ScrollTrigger.create({
   trigger: '#hero',
   start: 'bottom 90%',
@@ -59,8 +59,15 @@ function updateTimeline(idx) {
   fill.style.height = pct + '%';
   dots.forEach((d, i) => {
     d.classList.toggle('active', i <= idx);
-    /* Only the current section gets 'current' highlight */
     d.classList.toggle('current', i === idx);
+  });
+}
+
+function highlightStickyCard(idx) {
+  currentSection = idx;
+  stickyCards.forEach(c => {
+    const cardIdx = parseInt(c.dataset.sticky);
+    c.classList.toggle('active', cardIdx === idx);
   });
 }
 
@@ -70,15 +77,13 @@ function lightWing(sel, idx) {
   const wing = document.querySelector(sel);
   if (!wing) return;
   wing.classList.add('lit');
-  const wingFill = wing.querySelector('.wing-fill');
-  gsap.fromTo(wingFill, { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power2.out' });
+  gsap.fromTo(wing.querySelector('.wing-fill'),
+    { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power2.out' }
+  );
 
-  /* Show the persistent wing label */
-  const labelKey = WING_LABELS[idx];
-  if (labelKey) {
-    const wl = document.querySelector(`[data-wing-label="${labelKey}"]`);
-    if (wl) wl.classList.add('visible');
-  }
+  /* Show the sticky card for this wing */
+  const card = document.querySelector(`[data-sticky="${idx}"]`);
+  if (card) card.classList.add('visible');
 }
 
 function dimWing(sel, idx) {
@@ -89,11 +94,11 @@ function dimWing(sel, idx) {
   wing.classList.remove('lit');
   gsap.to(wing.querySelector('.wing-fill'), { opacity: 0, duration: 0.5 });
 
-  /* Hide the wing label */
-  const labelKey = WING_LABELS[idx];
-  if (labelKey) {
-    const wl = document.querySelector(`[data-wing-label="${labelKey}"]`);
-    if (wl) wl.classList.remove('visible');
+  /* Hide the sticky card */
+  const card = document.querySelector(`[data-sticky="${idx}"]`);
+  if (card) {
+    card.classList.remove('visible');
+    card.classList.remove('active');
   }
 }
 
@@ -102,14 +107,20 @@ function dimWing(sel, idx) {
    ======================================================================= */
 
 sections.forEach((section) => {
-  const idx  = parseInt(section.dataset.section);
-  const card = section.querySelector('.feature-card');
-  const side = card.dataset.side;
+  const idx = parseInt(section.dataset.section);
 
-  /* Card entrance offset */
+  /* Sections 1–4 are empty triggers (cards are in the sticky wrapper) */
+  /* Sections 0 and 5 have their own cards inside them */
+  const hasOwnCard = (idx === 0 || idx === 5);
+  const card = hasOwnCard ? section.querySelector('.feature-card') : null;
+
   let xFrom = 0;
-  if (side === 'left')  xFrom = -40;
-  if (side === 'right') xFrom = 40;
+  if (card) {
+    const side = card.dataset.side;
+    if (side === 'left') xFrom = -40;
+    if (side === 'right') xFrom = 40;
+    gsap.set(card, { opacity: 0, y: 30, x: xFrom });
+  }
 
   ScrollTrigger.create({
     trigger: section,
@@ -117,8 +128,10 @@ sections.forEach((section) => {
     end: 'bottom 35%',
 
     onEnter: () => {
-      /* Reveal card */
-      gsap.to(card, { opacity: 1, y: 0, x: 0, duration: 0.7, ease: 'power3.out' });
+      /* Reveal section's own card (sections 0 & 5) */
+      if (card) {
+        gsap.to(card, { opacity: 1, y: 0, x: 0, duration: 0.7, ease: 'power3.out' });
+      }
 
       /* Section 0 → light the body */
       if (idx === 0) {
@@ -126,8 +139,11 @@ sections.forEach((section) => {
         label.classList.add('visible');
       }
 
-      /* Light the wing + show its persistent label */
+      /* Sections 1–4: light wing + reveal sticky card */
       if (WINGS[idx]) lightWing(WINGS[idx], idx);
+
+      /* Highlight current sticky card */
+      highlightStickyCard(idx);
 
       /* Finale: glow + sunrise */
       if (idx === 5) {
@@ -139,18 +155,22 @@ sections.forEach((section) => {
     },
 
     onLeaveBack: () => {
-      /* Hide card */
-      gsap.to(card, { opacity: 0, y: 30, x: xFrom, duration: 0.4, ease: 'power2.in' });
+      /* Hide section's own card */
+      if (card) {
+        gsap.to(card, { opacity: 0, y: 30, x: xFrom, duration: 0.4, ease: 'power2.in' });
+      }
 
       if (idx === 0) {
         bBody.classList.remove('lit');
         label.classList.remove('visible');
       }
 
-      /* Dim wing + hide its label */
+      /* Dim wing + hide sticky card */
       if (WINGS[idx]) dimWing(WINGS[idx], idx);
 
-      /* Remove finale effects */
+      /* Unhighlight */
+      highlightStickyCard(idx - 1);
+
       if (idx === 5) {
         svg.classList.remove('glow-pulse');
         document.body.classList.remove('sunrise');
@@ -159,14 +179,10 @@ sections.forEach((section) => {
       updateTimeline(idx - 1);
     },
   });
-
-  /* Set initial (hidden) state */
-  gsap.set(card, { opacity: 0, y: 30, x: xFrom });
 });
 
 /* =======================================================================
-   Butterfly grows as user scrolls through the evolution
-   Starts at 0.55x scale and grows to 1.15x by the finale
+   Butterfly grows as user scrolls (0.55x → 1.15x)
    ======================================================================= */
 
 gsap.set(svg, { scale: 0.55 });
