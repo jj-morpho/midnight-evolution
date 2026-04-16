@@ -135,7 +135,13 @@ ScrollTrigger.create({
   onUpdate: (self) => {
     const p = self.progress;
 
-    // Update progress bar
+    let phase;
+    if (p < 0.15)      phase = 0;
+    else if (p < 0.35) phase = 1;
+    else if (p < 0.55) phase = 2;
+    else if (p < 0.75) phase = 3;
+    else                phase = 4;
+
     // Update bottom timeline
     if (hFill) hFill.style.width = (p * 100) + '%';
     hDots.forEach((d, i) => {
@@ -143,13 +149,6 @@ ScrollTrigger.create({
       d.classList.toggle('current', i === phase);
       d.classList.toggle('active', i <= phase);
     });
-
-    let phase;
-    if (p < 0.15)      phase = 0;
-    else if (p < 0.35) phase = 1;
-    else if (p < 0.55) phase = 2;
-    else if (p < 0.75) phase = 3;
-    else                phase = 4;
 
     applyPhase(phase);
   },
