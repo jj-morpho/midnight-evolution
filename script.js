@@ -15,7 +15,8 @@ const stage     = document.getElementById('stage');
 const blocks    = document.getElementById('blocks');
 const bScene    = document.getElementById('butterfly-scene');
 const pips      = document.querySelectorAll('.phase-pip');
-const trackFill = document.querySelector('.track-fill');
+const hDots     = document.querySelectorAll('.h-dot');
+const hFill     = document.querySelector('.h-timeline-fill');
 
 const core      = document.querySelector('[data-block="core"]');
 const callbacks = document.querySelector('[data-block="callbacks"]');
@@ -135,7 +136,13 @@ ScrollTrigger.create({
     const p = self.progress;
 
     // Update progress bar
-    if (trackFill) trackFill.style.width = (p * 100) + '%';
+    // Update bottom timeline
+    if (hFill) hFill.style.width = (p * 100) + '%';
+    hDots.forEach((d, i) => {
+      d.classList.toggle('done', i < phase);
+      d.classList.toggle('current', i === phase);
+      d.classList.toggle('active', i <= phase);
+    });
 
     let phase;
     if (p < 0.15)      phase = 0;
