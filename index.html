@@ -39,10 +39,19 @@
       <div class="phase-pip" data-phase="4"></div>
     </div>
 
-    <!-- Bottom progress track -->
-    <div class="track">
-      <div class="track-fill"></div>
-    </div>
+    <!-- Bottom timeline with labeled dots -->
+    <nav class="h-timeline" id="h-timeline">
+      <div class="h-timeline-track">
+        <div class="h-timeline-fill"></div>
+      </div>
+      <div class="h-timeline-dots">
+        <div class="h-dot active" data-dot="0"><span>Launch</span></div>
+        <div class="h-dot" data-dot="1"><span>Callbacks</span></div>
+        <div class="h-dot" data-dot="2"><span>Auto-Rolling</span></div>
+        <div class="h-dot" data-dot="3"><span>Midnight Adapter</span></div>
+        <div class="h-dot" data-dot="4"><span>$200T</span></div>
+      </div>
+    </nav>
 
     <!-- The 4 feature blocks — positioned by JS/CSS per phase -->
     <div class="blocks" id="blocks">
