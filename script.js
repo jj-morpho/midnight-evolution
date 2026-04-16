@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Morpho Midnight — Additive Horizontal Scroll
+   Morpho Midnight — Additive Block Layout
 
-   5 phases driven by vertical scroll (stage is pinned full-screen):
-   Phase 0: Core protocol block alone, centered
-   Phase 1: + Callbacks → 2 blocks side by side
-   Phase 2: + Auto-Rolling → 3 blocks (core shrinks, 2 on right)
-   Phase 3: + Midnight Adapters → 2×2 grid, all visible
+   5 phases driven by scroll (stage is pinned full-screen):
+   Phase 0: Core alone (centered)
+   Phase 1: + Callbacks stacks above Core
+   Phase 2: + Auto-Rolling fills in beside Core (bottom-right)
+   Phase 3: + Midnight Adapters completes 2×2 (top-right)
    Phase 4: Blocks fade → butterfly takes off in daylight
    ========================================================================== */
 
@@ -15,6 +15,7 @@ const stage     = document.getElementById('stage');
 const blocks    = document.getElementById('blocks');
 const bScene    = document.getElementById('butterfly-scene');
 const pips      = document.querySelectorAll('.phase-pip');
+const trackFill = document.querySelector('.track-fill');
 
 const core      = document.querySelector('[data-block="core"]');
 const callbacks = document.querySelector('[data-block="callbacks"]');
@@ -24,28 +25,20 @@ const adapters  = document.querySelector('[data-block="adapters"]');
 const allBlocks = [core, callbacks, autoroll, adapters];
 
 let currentPhase = -1;
-const GAP = 20; // px gap between blocks in grid
-
-/* =======================================================================
-   Layout helpers — compute positions relative to viewport center
-   ======================================================================= */
+const GAP = 16;
 
 function vw() { return window.innerWidth; }
 function vh() { return window.innerHeight; }
 
-/* Position a block at absolute x, y (center-based) */
-function posBlock(el, x, y) {
-  gsap.to(el, {
-    left: x,
-    top: y,
-    duration: 0.7,
-    ease: 'power2.inOut',
-  });
+/* Animate block to position */
+function posBlock(el, x, y, w) {
+  const props = { left: x, top: y, duration: 0.65, ease: 'power2.inOut' };
+  if (w !== undefined) props.width = w;
+  gsap.to(el, props);
 }
 
 /* =======================================================================
-   Phase definitions
-   Each phase returns positions for visible blocks
+   Phase definitions — Core is always bottom-left anchor
    ======================================================================= */
 
 function applyPhase(phase) {
@@ -58,88 +51,80 @@ function applyPhase(phase) {
     p.classList.toggle('done', i < phase);
   });
 
-  // Block dimensions
-  const bw = 420;  // normal width
-  const cw = 380;  // compact width
-  const bh = 280;  // approx block height
-  const ch = 240;  // compact height
-
   const cx = vw() / 2;
   const cy = vh() / 2;
 
-  // Reset all
-  allBlocks.forEach(b => {
-    b.classList.remove('visible', 'active', 'compact');
-  });
+  // Block sizes — responsive
+  const bw = Math.min(420, vw() * 0.3);   // single block width
+  const bh = 260;                           // block height estimate
+  const gap = GAP;
+
+  // Reset visibility
+  allBlocks.forEach(b => b.classList.remove('visible', 'active'));
   blocks.classList.remove('hidden');
   bScene.classList.remove('visible', 'flapping');
   stage.classList.remove('daylight');
 
   if (phase === 0) {
-    /* --- Phase 0: Just core, centered --- */
+    /* ─── Phase 0: Core alone, centered ─── */
     core.classList.add('visible', 'active');
-    posBlock(core, cx - bw/2, cy - bh/2);
+    posBlock(core, cx - bw/2, cy - bh/2, bw);
 
   } else if (phase === 1) {
-    /* --- Phase 1: Core + Callbacks side by side --- */
+    /* ─── Phase 1: Callbacks on top, Core below ─── */
     core.classList.add('visible');
     callbacks.classList.add('visible', 'active');
 
-    const totalW = bw + GAP + bw;
-    const startX = cx - totalW / 2;
-    posBlock(core,      startX,              cy - bh/2);
-    posBlock(callbacks,  startX + bw + GAP,   cy - bh/2);
-
-  } else if (phase === 2) {
-    /* --- Phase 2: Core (left) + Callbacks & Auto-Roll stacked (right) --- */
-    core.classList.add('visible');
-    callbacks.classList.add('visible', 'compact');
-    autoroll.classList.add('visible', 'active', 'compact');
-
-    const leftW = bw;
-    const rightW = cw;
-    const totalW = leftW + GAP + rightW;
-    const startX = cx - totalW / 2;
-    const stackH = ch + GAP + ch;
-    const stackY = cy - stackH / 2;
-
-    posBlock(core,      startX,              cy - bh/2);
-    posBlock(callbacks,  startX + leftW + GAP, stackY);
-    posBlock(autoroll,   startX + leftW + GAP, stackY + ch + GAP);
-
-  } else if (phase === 3) {
-    /* --- Phase 3: 2×2 grid — all 4 blocks visible --- */
-    allBlocks.forEach(b => b.classList.add('visible', 'compact'));
-    adapters.classList.add('active');
-
-    const w = cw;
-    const h = ch;
-    const totalW = w + GAP + w;
-    const totalH = h + GAP + h;
-    const sx = cx - totalW / 2;
+    const totalH = bh + gap + bh;
     const sy = cy - totalH / 2;
 
-    posBlock(core,       sx,           sy + h + GAP);  // bottom-left
-    posBlock(callbacks,  sx,           sy);             // top-left
-    posBlock(autoroll,   sx + w + GAP, sy + h + GAP);  // bottom-right
-    posBlock(adapters,   sx + w + GAP, sy);             // top-right
+    posBlock(callbacks, cx - bw/2, sy, bw);
+    posBlock(core,      cx - bw/2, sy + bh + gap, bw);
+
+  } else if (phase === 2) {
+    /* ─── Phase 2: Callbacks top-left, Core BL, Auto-Rolling BR ─── */
+    core.classList.add('visible');
+    callbacks.classList.add('visible');
+    autoroll.classList.add('visible', 'active');
+
+    const gridW = bw + gap + bw;
+    const gridH = bh + gap + bh;
+    const sx = cx - gridW / 2;
+    const sy = cy - gridH / 2;
+
+    // Callbacks spans full width on top
+    posBlock(callbacks, sx, sy, gridW);
+    posBlock(core,      sx, sy + bh + gap, bw);
+    posBlock(autoroll,  sx + bw + gap, sy + bh + gap, bw);
+
+  } else if (phase === 3) {
+    /* ─── Phase 3: Full 2×2 grid ─── */
+    allBlocks.forEach(b => b.classList.add('visible'));
+    adapters.classList.add('active');
+
+    const gridW = bw + gap + bw;
+    const gridH = bh + gap + bh;
+    const sx = cx - gridW / 2;
+    const sy = cy - gridH / 2;
+
+    posBlock(callbacks, sx,            sy,              bw);  // TL
+    posBlock(adapters,  sx + bw + gap, sy,              bw);  // TR
+    posBlock(core,      sx,            sy + bh + gap,   bw);  // BL
+    posBlock(autoroll,  sx + bw + gap, sy + bh + gap,   bw);  // BR
 
   } else if (phase === 4) {
-    /* --- Phase 4: Butterfly takeoff in daylight --- */
+    /* ─── Phase 4: Butterfly in daylight ─── */
     blocks.classList.add('hidden');
     stage.classList.add('daylight');
     bScene.classList.add('visible');
-
-    // Start flapping after a short delay
-    setTimeout(() => bScene.classList.add('flapping'), 600);
+    setTimeout(() => bScene.classList.add('flapping'), 500);
   }
 }
 
 /* =======================================================================
-   Scroll-driven phase changes
+   Scroll → phase mapping (pinned stage)
    ======================================================================= */
 
-// Pin the stage and scrub through 5 phases over 4000px of scroll
 ScrollTrigger.create({
   trigger: '#stage',
   start: 'top top',
@@ -147,7 +132,10 @@ ScrollTrigger.create({
   pin: true,
   scrub: 0.8,
   onUpdate: (self) => {
-    const p = self.progress; // 0 → 1
+    const p = self.progress;
+
+    // Update progress bar
+    if (trackFill) trackFill.style.width = (p * 100) + '%';
 
     let phase;
     if (p < 0.15)      phase = 0;
@@ -160,12 +148,12 @@ ScrollTrigger.create({
   },
 });
 
-/* Start with phase 0 */
 applyPhase(0);
 
-/* Handle resize */
 window.addEventListener('resize', () => {
-  applyPhase(currentPhase);
+  currentPhase = -1; // force re-apply
+  applyPhase(0);
+  ScrollTrigger.refresh();
 });
 
 ScrollTrigger.refresh();
