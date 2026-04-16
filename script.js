@@ -1,106 +1,159 @@
 /* ==========================================================================
-   Morpho Midnight Evolution — Horizontal Timeline Scroll
+   Morpho Midnight — Additive Block Layout
+
+   5 phases driven by scroll (stage is pinned full-screen):
+   Phase 0: Core alone (centered)
+   Phase 1: + Callbacks stacks above Core
+   Phase 2: + Auto-Rolling fills in beside Core (bottom-right)
+   Phase 3: + Midnight Adapters completes 2×2 (top-right)
+   Phase 4: Blocks fade → butterfly takes off in daylight
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* --- DOM refs --- */
-const track       = document.querySelector('.timeline-track');
-const features    = document.querySelectorAll('.feature-block');
-const connectors  = document.querySelectorAll('.connector');
-const trackFill   = document.querySelector('.track-line-fill');
-const finale      = document.querySelector('.finale');
+const stage     = document.getElementById('stage');
+const blocks    = document.getElementById('blocks');
+const bScene    = document.getElementById('butterfly-scene');
+const pips      = document.querySelectorAll('.phase-pip');
+const trackFill = document.querySelector('.track-fill');
 
-/* =======================================================================
-   Hero entrance
-   ======================================================================= */
-gsap.from('.hero-eyebrow',    { opacity: 0, y: 20, duration: 0.8, delay: 0.3, ease: 'power3.out' });
-gsap.from('.hero-title',      { opacity: 0, y: 30, duration: 0.9, delay: 0.5, ease: 'power3.out' });
-gsap.from('.hero-subtitle',   { opacity: 0, y: 20, duration: 0.8, delay: 0.7, ease: 'power3.out' });
-gsap.from('.scroll-indicator', { opacity: 0, y: 15, duration: 0.8, delay: 1.0, ease: 'power3.out' });
+const core      = document.querySelector('[data-block="core"]');
+const callbacks = document.querySelector('[data-block="callbacks"]');
+const autoroll  = document.querySelector('[data-block="autoroll"]');
+const adapters  = document.querySelector('[data-block="adapters"]');
 
-ScrollTrigger.create({
-  trigger: '#hero',
-  start: 'bottom 90%',
-  onEnter: () => gsap.to('.scroll-indicator', { opacity: 0, duration: 0.3 }),
-  onLeaveBack: () => gsap.to('.scroll-indicator', { opacity: 1, duration: 0.3 }),
-});
+const allBlocks = [core, callbacks, autoroll, adapters];
 
-/* =======================================================================
-   Horizontal scroll: pin the timeline section and scroll sideways
-   ======================================================================= */
+let currentPhase = -1;
+const GAP = 16;
 
-/* Calculate how far to scroll horizontally */
-function getScrollWidth() {
-  return track.scrollWidth - window.innerWidth;
+function vw() { return window.innerWidth; }
+function vh() { return window.innerHeight; }
+
+/* Animate block to position */
+function posBlock(el, x, y, w) {
+  const props = { left: x, top: y, duration: 0.65, ease: 'power2.inOut' };
+  if (w !== undefined) props.width = w;
+  gsap.to(el, props);
 }
 
-/* The main horizontal scroll animation */
-const horizontalScroll = gsap.to(track, {
-  x: () => -getScrollWidth(),
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '.timeline-section',
-    start: 'top top',
-    end: () => `+=${getScrollWidth()}`,
-    pin: true,
-    scrub: 1,
-    invalidateOnRefresh: true,
-    onUpdate: (self) => {
-      const progress = self.progress;
+/* =======================================================================
+   Phase definitions — Core is always bottom-left anchor
+   ======================================================================= */
 
-      /* Update the track line fill */
-      trackFill.style.width = (progress * 100) + '%';
+function applyPhase(phase) {
+  if (phase === currentPhase) return;
+  currentPhase = phase;
 
-      /* Progressively reveal features based on scroll progress */
-      const totalSteps = 4; /* 0: core, 1: callbacks, 2: autoroll, 3: adapters */
-      const step = progress * totalSteps;
+  // Update pips
+  pips.forEach((p, i) => {
+    p.classList.toggle('active', i === phase);
+    p.classList.toggle('done', i < phase);
+  });
 
-      features.forEach((f, i) => {
-        if (step >= i * 0.85) {
-          f.classList.add('visible');
-        } else {
-          f.classList.remove('visible');
-        }
-        /* Active = the most recently revealed */
-        f.classList.toggle('active', Math.floor(step) === i || (i === totalSteps - 1 && step >= (totalSteps - 1) * 0.85));
-      });
+  const cx = vw() / 2;
+  const cy = vh() / 2;
 
-      /* Show connectors slightly after their preceding block */
-      connectors.forEach((c) => {
-        const afterIdx = parseInt(c.dataset.after);
-        if (step >= afterIdx + 0.5) {
-          c.classList.add('visible');
-        } else {
-          c.classList.remove('visible');
-        }
-      });
-    },
-  },
-});
+  // Block sizes — responsive
+  const bw = Math.min(420, vw() * 0.3);   // single block width
+  const bh = 260;                           // block height estimate
+  const gap = GAP;
 
-/* Show core block immediately when section enters */
-ScrollTrigger.create({
-  trigger: '.timeline-section',
-  start: 'top 80%',
-  onEnter: () => {
-    features[0].classList.add('visible');
-    features[0].classList.add('active');
-  },
-});
+  // Reset visibility
+  allBlocks.forEach(b => b.classList.remove('visible', 'active'));
+  blocks.classList.remove('hidden');
+  bScene.classList.remove('visible', 'flapping');
+  stage.classList.remove('daylight');
+
+  if (phase === 0) {
+    /* ─── Phase 0: Core alone, centered ─── */
+    core.classList.add('visible', 'active');
+    posBlock(core, cx - bw/2, cy - bh/2, bw);
+
+  } else if (phase === 1) {
+    /* ─── Phase 1: Callbacks on top, Core below ─── */
+    core.classList.add('visible');
+    callbacks.classList.add('visible', 'active');
+
+    const totalH = bh + gap + bh;
+    const sy = cy - totalH / 2;
+
+    posBlock(callbacks, cx - bw/2, sy, bw);
+    posBlock(core,      cx - bw/2, sy + bh + gap, bw);
+
+  } else if (phase === 2) {
+    /* ─── Phase 2: Callbacks top-left, Core BL, Auto-Rolling BR ─── */
+    core.classList.add('visible');
+    callbacks.classList.add('visible');
+    autoroll.classList.add('visible', 'active');
+
+    const gridW = bw + gap + bw;
+    const gridH = bh + gap + bh;
+    const sx = cx - gridW / 2;
+    const sy = cy - gridH / 2;
+
+    // Callbacks spans full width on top
+    posBlock(callbacks, sx, sy, gridW);
+    posBlock(core,      sx, sy + bh + gap, bw);
+    posBlock(autoroll,  sx + bw + gap, sy + bh + gap, bw);
+
+  } else if (phase === 3) {
+    /* ─── Phase 3: Full 2×2 grid ─── */
+    allBlocks.forEach(b => b.classList.add('visible'));
+    adapters.classList.add('active');
+
+    const gridW = bw + gap + bw;
+    const gridH = bh + gap + bh;
+    const sx = cx - gridW / 2;
+    const sy = cy - gridH / 2;
+
+    posBlock(callbacks, sx,            sy,              bw);  // TL
+    posBlock(adapters,  sx + bw + gap, sy,              bw);  // TR
+    posBlock(core,      sx,            sy + bh + gap,   bw);  // BL
+    posBlock(autoroll,  sx + bw + gap, sy + bh + gap,   bw);  // BR
+
+  } else if (phase === 4) {
+    /* ─── Phase 4: Butterfly in daylight ─── */
+    blocks.classList.add('hidden');
+    stage.classList.add('daylight');
+    bScene.classList.add('visible');
+    setTimeout(() => bScene.classList.add('flapping'), 500);
+  }
+}
 
 /* =======================================================================
-   Finale reveal
+   Scroll → phase mapping (pinned stage)
    ======================================================================= */
 
 ScrollTrigger.create({
-  trigger: '.finale',
-  start: 'top 70%',
-  onEnter: () => finale.classList.add('visible'),
-  onLeaveBack: () => finale.classList.remove('visible'),
+  trigger: '#stage',
+  start: 'top top',
+  end: '+=4000',
+  pin: true,
+  scrub: 0.8,
+  onUpdate: (self) => {
+    const p = self.progress;
+
+    // Update progress bar
+    if (trackFill) trackFill.style.width = (p * 100) + '%';
+
+    let phase;
+    if (p < 0.15)      phase = 0;
+    else if (p < 0.35) phase = 1;
+    else if (p < 0.55) phase = 2;
+    else if (p < 0.75) phase = 3;
+    else                phase = 4;
+
+    applyPhase(phase);
+  },
 });
 
-/* =======================================================================
-   Refresh
-   ======================================================================= */
+applyPhase(0);
+
+window.addEventListener('resize', () => {
+  currentPhase = -1; // force re-apply
+  applyPhase(0);
+  ScrollTrigger.refresh();
+});
+
 ScrollTrigger.refresh();

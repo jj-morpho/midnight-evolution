@@ -1,12 +1,8 @@
 /* ==========================================================================
-   Morpho Midnight Evolution — Horizontal Timeline
+   Morpho Midnight Evolution — Additive Horizontal Experience
    ========================================================================== */
 
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
   --blue: #004EC3;
@@ -16,239 +12,204 @@
   --blue-border: rgba(0, 78, 195, 0.22);
   --dawn: #C4DAFF;
   --bg: #050510;
-  --bg-card: rgba(10, 10, 30, 0.8);
-  --bg-card-border: rgba(255, 255, 255, 0.07);
+  --bg-card: rgba(12, 12, 32, 0.9);
+  --bg-card-border: rgba(255, 255, 255, 0.08);
   --text: #FFFFFF;
   --text-dim: #9090AA;
   --text-muted: #505068;
   --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+html { -webkit-font-smoothing: antialiased; }
 
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
-  line-height: 1.6;
 }
 
 /* ==========================================================================
-   Hero
+   Stage: fixed full-viewport canvas
    ========================================================================== */
 
-.hero {
+.stage {
+  position: relative;
+  width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  transition: background 1.5s ease;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 78, 195, 0.06) 0%, transparent 70%);
-  pointer-events: none;
+.stage.daylight {
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 60%,
+    rgba(196, 218, 255, 0.25) 0%,
+    rgba(196, 218, 255, 0.08) 40%,
+    var(--bg) 75%
+  );
 }
 
-.hero-content {
-  text-align: center;
-  z-index: 1;
-}
-
-.hero-eyebrow {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--blue-light);
-  margin-bottom: 20px;
-}
-
-.hero-title {
-  font-size: clamp(52px, 10vw, 110px);
-  font-weight: 700;
-  letter-spacing: -3px;
-  line-height: 1.0;
-  margin-bottom: 20px;
-}
-
-.hero-subtitle {
-  font-size: clamp(16px, 2.2vw, 22px);
-  font-weight: 300;
-  color: var(--text-dim);
-  margin-bottom: 60px;
-}
-
-.scroll-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  color: var(--text-muted);
-}
-
-.scroll-indicator span {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.scroll-indicator svg {
-  color: var(--blue);
-  animation: bounce 2.5s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50% { transform: translateY(8px); opacity: 1; }
+/* Scroll driver — no longer needed, GSAP end controls distance */
+.scroll-driver {
+  /* Height set by JS: 5 phases * 100vh */
+  height: 500vh;
 }
 
 /* ==========================================================================
-   Horizontal Timeline Section (pinned by GSAP)
+   Phase pips (top center)
    ========================================================================== */
 
-.timeline-section {
-  position: relative;
-  overflow: hidden;
-}
-
-.timeline-track {
-  display: flex;
-  align-items: center;
-  height: 100vh;
-  padding: 0 8vw;
-  position: relative;
-  /* Width set dynamically or via JS, but we need enough room */
-  width: max-content;
-  min-width: 100vw;
-}
-
-/* Bottom progress line */
-.track-line {
+.phase-bar {
   position: absolute;
-  bottom: 100px;
-  left: 8vw;
-  right: 0;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 50;
+}
+
+.phase-pip {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+.phase-pip.active {
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+.phase-pip.done {
+  background: rgba(0, 112, 255, 0.4);
+}
+
+/* Bottom progress track */
+.track {
+  position: absolute;
+  bottom: 40px;
+  left: 8%;
+  right: 8%;
   height: 2px;
   background: rgba(255, 255, 255, 0.06);
+  border-radius: 1px;
+  z-index: 50;
 }
 
-.track-line-fill {
+.track-fill {
   height: 100%;
   width: 0%;
   background: var(--blue);
-  box-shadow: 0 0 12px var(--blue-glow);
+  border-radius: 1px;
+  box-shadow: 0 0 10px var(--blue-glow);
   transition: width 0.1s linear;
 }
 
 /* ==========================================================================
-   Feature blocks
+   Blocks container
    ========================================================================== */
 
-.features {
+.blocks {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 0;
-  padding-right: 10vw;
+  justify-content: center;
+  transition: opacity 0.8s ease;
 }
 
-.feature-block {
-  flex-shrink: 0;
-  width: clamp(300px, 28vw, 400px);
+.blocks.hidden {
   opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  pointer-events: none;
 }
 
-.feature-block.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
+/* ==========================================================================
+   Individual blocks
+   ========================================================================== */
 
-.feature-block-inner {
+.block {
+  position: absolute;
+  width: 420px;
   padding: 36px 32px;
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: 16px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  transition: border-color 0.4s ease, background 0.4s ease;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Currently active block */
-.feature-block.active .feature-block-inner {
+.block.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.block.active {
   border-color: var(--blue-border);
-  background: rgba(0, 78, 195, 0.05);
+  background: rgba(0, 78, 195, 0.06);
 }
 
-/* Highlight (Midnight Adapters) */
-.feature-block--highlight.visible .feature-block-inner {
-  border-color: var(--blue-border);
+.block.compact {
+  /* Smaller version when sharing space */
+  width: 380px;
+  padding: 28px 26px;
 }
 
-/* Core protocol gets special treatment */
-.feature-block--core .feature-block-inner {
-  background: rgba(0, 78, 195, 0.04);
-  border-color: rgba(0, 78, 195, 0.15);
+.block.compact .block-title {
+  font-size: 28px;
 }
 
-.fb-badge {
-  display: inline-block;
+.block.compact .block-desc {
+  font-size: 13px;
+}
+
+.block-badge {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--blue-light);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.fb-badge--highlight {
+.badge-highlight {
   color: var(--dawn);
 }
 
-.fb-title {
-  font-size: clamp(28px, 3vw, 40px);
+.block-title {
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1.1;
   margin-bottom: 14px;
 }
 
-.fb-desc {
+.block-desc {
   font-size: 14px;
   font-weight: 300;
   line-height: 1.7;
   color: var(--text-dim);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
-.fb-audience {
+.block-audience {
   font-size: 12px;
   font-weight: 500;
   color: var(--blue-light);
-  letter-spacing: 0.3px;
 }
 
-.fb-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.block-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
-.fb-tag {
-  display: inline-block;
+.btag {
   padding: 4px 12px;
   font-size: 11px;
   font-weight: 500;
@@ -259,200 +220,133 @@ body {
 }
 
 /* ==========================================================================
-   Connectors (+ between blocks)
+   Butterfly scene (finale)
    ========================================================================== */
 
-.connector {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  width: 80px;
-  position: relative;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.connector.visible {
-  opacity: 1;
-}
-
-.connector-line {
-  width: 100%;
-  height: 2px;
-  background: var(--blue);
-  box-shadow: 0 0 8px var(--blue-glow);
-}
-
-.connector-plus {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: var(--text);
-  font-size: 18px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 16px var(--blue-glow);
-}
-
-/* ==========================================================================
-   Finale — Full-screen Global Credit Market
-   ========================================================================== */
-
-.finale {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  padding: 80px 40px;
-}
-
-.finale-bg {
+.butterfly-scene {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 60%,
-    rgba(196, 218, 255, 0.10) 0%,
-    rgba(0, 78, 195, 0.04) 40%,
-    var(--bg) 70%
-  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 1s ease;
 }
 
-.finale.visible .finale-bg {
+.butterfly-scene.visible {
   opacity: 1;
 }
 
-.finale-content {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  opacity: 0;
-  transform: translateY(40px);
+.bfly-svg {
+  width: clamp(280px, 35vw, 420px);
+  height: auto;
+  margin-bottom: 24px;
 }
 
-.finale.visible .finale-content {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+/* Wing flap */
+.butterfly-scene.flapping .bw-tl {
+  animation: flapTL 2.4s ease-in-out infinite;
+  transform-origin: 490px 410px;
+}
+.butterfly-scene.flapping .bw-tr {
+  animation: flapTR 2.4s ease-in-out infinite;
+  transform-origin: 510px 410px;
+}
+.butterfly-scene.flapping .bw-bl {
+  animation: flapBL 2.4s ease-in-out infinite;
+  transform-origin: 490px 455px;
+}
+.butterfly-scene.flapping .bw-br {
+  animation: flapBR 2.4s ease-in-out infinite;
+  transform-origin: 510px 455px;
 }
 
-.finale-eyebrow {
-  font-size: 12px;
+@keyframes flapTL {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  35% { transform: rotate(5deg) scaleX(0.88); }
+  65% { transform: rotate(-2deg) scaleX(1.03); }
+}
+@keyframes flapTR {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  35% { transform: rotate(-5deg) scaleX(0.88); }
+  65% { transform: rotate(2deg) scaleX(1.03); }
+}
+@keyframes flapBL {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  40% { transform: rotate(-3.5deg) scaleX(0.9); }
+  70% { transform: rotate(1.5deg) scaleX(1.02); }
+}
+@keyframes flapBR {
+  0%, 100% { transform: rotate(0deg) scaleX(1); }
+  40% { transform: rotate(3.5deg) scaleX(0.9); }
+  70% { transform: rotate(-1.5deg) scaleX(1.02); }
+}
+
+/* Butterfly glow */
+.butterfly-scene.flapping .bfly-svg {
+  filter: drop-shadow(0 0 30px rgba(196, 218, 255, 0.3));
+  animation: bflyGlow 3s ease-in-out infinite;
+}
+
+@keyframes bflyGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(196,218,255,0.2)); }
+  50% { filter: drop-shadow(0 0 50px rgba(196,218,255,0.4)); }
+}
+
+/* Text below butterfly */
+.bfly-text {
+  text-align: center;
+}
+
+.bfly-eyebrow {
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--blue-light);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
-.finale-title {
-  font-size: clamp(40px, 7vw, 80px);
+.bfly-title {
+  font-size: clamp(32px, 5vw, 56px);
   font-weight: 700;
-  letter-spacing: -2px;
-  line-height: 1.05;
-  margin-bottom: 24px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: 16px;
 }
 
-.finale-desc {
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.7;
+.bfly-stat {
+  font-size: 16px;
   color: var(--text-dim);
-  margin-bottom: 40px;
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.finale-stat {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 40px;
-}
-
-.finale-number {
-  font-size: clamp(48px, 8vw, 96px);
+.bfly-number {
+  font-size: clamp(36px, 5vw, 64px);
   font-weight: 700;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   background: linear-gradient(135deg, var(--blue-light), var(--dawn));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.finale-label {
-  font-size: 16px;
-  font-weight: 300;
-  color: var(--text-dim);
-}
-
-.finale-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-.finale-tag {
-  padding: 6px 16px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--dawn);
-  background: rgba(196, 218, 255, 0.06);
-  border: 1px solid rgba(196, 218, 255, 0.12);
-  border-radius: 100px;
-}
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-.footer {
-  padding: 80px 40px;
-  text-align: center;
-  border-top: 1px solid var(--bg-card-border);
-}
-
-.footer-brand {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-
-.footer-tagline {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 300;
-}
-
 /* ==========================================================================
    Responsive
    ========================================================================== */
 
-@media (max-width: 768px) {
-  .feature-block {
-    width: clamp(260px, 75vw, 320px);
-  }
+@media (max-width: 900px) {
+  .block { width: 320px; padding: 28px 24px; }
+  .block.compact { width: 280px; padding: 22px 20px; }
+  .block-title { font-size: 28px; }
+  .block.compact .block-title { font-size: 22px; }
+}
 
-  .connector { width: 50px; }
-
-  .finale-stat {
-    flex-direction: column;
-    gap: 4px;
-  }
+@media (max-width: 600px) {
+  .block { width: 260px; padding: 22px 20px; }
+  .block.compact { width: 230px; padding: 18px 16px; }
+  .block-title { font-size: 24px; }
+  .block.compact .block-title { font-size: 20px; }
+  .block-desc { font-size: 12px; }
 }
