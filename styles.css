@@ -307,6 +307,16 @@ body {
   background: rgba(0, 78, 195, 0.06);
 }
 
+.block.grid-mode {
+  /* When in 2x2 grid, all blocks match height */
+  display: flex;
+  flex-direction: column;
+}
+
+.block.grid-mode .block-desc {
+  flex: 1;
+}
+
 .block.compact {
   /* Smaller version when sharing space */
   width: 380px;
