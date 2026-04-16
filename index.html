@@ -12,134 +12,93 @@
 </head>
 <body>
 
-  <!-- Hero -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <p class="hero-eyebrow">Introducing</p>
-      <h1 class="hero-title">Morpho<br>Midnight</h1>
-      <p class="hero-subtitle">The evolution of onchain credit</p>
-      <div class="scroll-indicator">
-        <span>Scroll to explore the rollout</span>
-        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-          <path d="M8 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+  <!-- Full-viewport container pinned for the entire experience -->
+  <div class="stage" id="stage">
+
+    <!-- Phase indicator (top) -->
+    <div class="phase-bar">
+      <div class="phase-pip active" data-phase="0"></div>
+      <div class="phase-pip" data-phase="1"></div>
+      <div class="phase-pip" data-phase="2"></div>
+      <div class="phase-pip" data-phase="3"></div>
+      <div class="phase-pip" data-phase="4"></div>
+    </div>
+
+    <!-- The 4 feature blocks — positioned by JS/CSS per phase -->
+    <div class="blocks" id="blocks">
+
+      <div class="block block-core" data-block="core">
+        <p class="block-badge">Core Protocol</p>
+        <h2 class="block-title">Morpho<br>Midnight</h2>
+        <p class="block-desc">Fixed-rate, fixed-term lending. The full term structure of credit, onchain for the first time.</p>
+        <div class="block-tags">
+          <span class="btag">Immutable</span>
+          <span class="btag">Permissionless</span>
+          <span class="btag">Direct lending</span>
+        </div>
+      </div>
+
+      <div class="block block-callbacks" data-block="callbacks">
+        <p class="block-badge">+ Callbacks</p>
+        <h2 class="block-title">Callbacks</h2>
+        <p class="block-desc">Compose Midnight into more sophisticated products. Lend offers against capital already earning yield — no idle capital, ever.</p>
+        <p class="block-audience">For integrators & power curators</p>
+      </div>
+
+      <div class="block block-autoroll" data-block="autoroll">
+        <p class="block-badge">+ Auto-Rolling</p>
+        <h2 class="block-title">Auto-Rolling</h2>
+        <p class="block-desc">Positions behave like a continuous product, not a one-shot trade. Capital stays productive across terms.</p>
+        <p class="block-audience">For end users & vault curators</p>
+      </div>
+
+      <div class="block block-adapters" data-block="adapters">
+        <p class="block-badge badge-highlight">+ Midnight Adapters</p>
+        <h2 class="block-title">Midnight<br>Adapters</h2>
+        <p class="block-desc">Added to the vault registry. Billions of vault liquidity can now route into fixed-rate markets.</p>
+        <p class="block-audience">Unlocks $1B+ vault liquidity</p>
+      </div>
+
+    </div>
+
+    <!-- Butterfly finale (hidden until phase 4) -->
+    <div class="butterfly-scene" id="butterfly-scene">
+      <svg class="bfly-svg" viewBox="0 0 1000 900" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g-tl" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#003A92"/><stop offset="100%" stop-color="#0070FF"/>
+          </linearGradient>
+          <linearGradient id="g-tr" x1="100%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#003A92"/><stop offset="100%" stop-color="#0070FF"/>
+          </linearGradient>
+          <linearGradient id="g-bl" x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stop-color="#003080"/><stop offset="100%" stop-color="#0060DD"/>
+          </linearGradient>
+          <linearGradient id="g-br" x1="80%" y1="0%" x2="20%" y2="100%">
+            <stop offset="0%" stop-color="#003080"/><stop offset="100%" stop-color="#0060DD"/>
+          </linearGradient>
+          <linearGradient id="g-body" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stop-color="#0070FF"/><stop offset="100%" stop-color="#003A92"/>
+          </linearGradient>
+        </defs>
+        <g class="bw bw-tl"><path d="M 480 395 C 450 340,380 240,280 160 C 200 100,120 55,65 40 C 25 28,5 45,5 80 C 5 130,40 210,100 290 C 175 380,300 415,400 418 C 440 418,468 410,480 402 Z" fill="url(#g-tl)"/></g>
+        <g class="bw bw-tr"><path d="M 520 395 C 550 340,620 240,720 160 C 800 100,880 55,935 40 C 975 28,995 45,995 80 C 995 130,960 210,900 290 C 825 380,700 415,600 418 C 560 418,532 410,520 402 Z" fill="url(#g-tr)"/></g>
+        <g class="bw bw-bl"><path d="M 480 465 C 450 510,370 600,270 690 C 190 755,110 810,60 840 C 25 862,5 855,8 825 C 12 790,50 720,115 645 C 200 555,330 490,420 468 C 455 462,472 462,480 462 Z" fill="url(#g-bl)"/></g>
+        <g class="bw bw-br"><path d="M 520 465 C 550 510,630 600,730 690 C 810 755,890 810,940 840 C 975 862,995 855,992 825 C 988 790,950 720,885 645 C 800 555,670 490,580 468 C 545 462,528 462,520 462 Z" fill="url(#g-br)"/></g>
+        <ellipse cx="500" cy="430" rx="18" ry="50" fill="url(#g-body)"/>
+        <path d="M 493 382 C 472 330,430 280,395 255" fill="none" stroke="#0070FF" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="395" cy="255" r="4" fill="#0070FF"/>
+        <path d="M 507 382 C 528 330,570 280,605 255" fill="none" stroke="#0070FF" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="605" cy="255" r="4" fill="#0070FF"/>
+      </svg>
+      <div class="bfly-text">
+        <p class="bfly-eyebrow">The Vision</p>
+        <h2 class="bfly-title">Addressing the<br>Global Credit Market</h2>
+        <p class="bfly-stat"><span class="bfly-number">$200T</span> now reachable</p>
       </div>
     </div>
-  </section>
 
-  <!-- Horizontal scroll timeline -->
-  <section class="timeline-section" id="timeline-section">
-    <div class="timeline-track">
-
-      <!-- Progress bar along the bottom -->
-      <div class="track-line">
-        <div class="track-line-fill"></div>
-      </div>
-
-      <!-- Feature blocks (appear progressively) -->
-      <div class="features">
-
-        <!-- 0: Core Protocol — always visible once we enter -->
-        <div class="feature-block feature-block--core" data-feature="0">
-          <div class="feature-block-inner">
-            <div class="fb-badge">Core Protocol</div>
-            <h2 class="fb-title">Morpho<br>Midnight</h2>
-            <p class="fb-desc">
-              Fixed-rate, fixed-term lending. The full term structure of credit, onchain for the first time.
-            </p>
-            <div class="fb-tags">
-              <span class="fb-tag">Immutable</span>
-              <span class="fb-tag">Permissionless</span>
-              <span class="fb-tag">Direct lending</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- + connector -->
-        <div class="connector" data-after="0">
-          <div class="connector-line"></div>
-          <div class="connector-plus">+</div>
-        </div>
-
-        <!-- 1: Callbacks -->
-        <div class="feature-block" data-feature="1">
-          <div class="feature-block-inner">
-            <div class="fb-badge">Evolution 01</div>
-            <h2 class="fb-title">Callbacks</h2>
-            <p class="fb-desc">
-              Compose Midnight into more sophisticated products. Lend offers against capital already earning yield — no idle capital, ever.
-            </p>
-            <p class="fb-audience">For integrators & power curators</p>
-          </div>
-        </div>
-
-        <div class="connector" data-after="1">
-          <div class="connector-line"></div>
-          <div class="connector-plus">+</div>
-        </div>
-
-        <!-- 2: Auto-rolling -->
-        <div class="feature-block" data-feature="2">
-          <div class="feature-block-inner">
-            <div class="fb-badge">Evolution 02</div>
-            <h2 class="fb-title">Auto-Rolling</h2>
-            <p class="fb-desc">
-              Positions behave like a continuous product, not a one-shot trade. Capital stays productive across terms automatically.
-            </p>
-            <p class="fb-audience">For end users & vault curators</p>
-          </div>
-        </div>
-
-        <div class="connector" data-after="2">
-          <div class="connector-line"></div>
-          <div class="connector-plus">+</div>
-        </div>
-
-        <!-- 3: Midnight Adapters -->
-        <div class="feature-block feature-block--highlight" data-feature="3">
-          <div class="feature-block-inner">
-            <div class="fb-badge fb-badge--highlight">The Second Launch</div>
-            <h2 class="fb-title">Midnight<br>Adapters</h2>
-            <p class="fb-desc">
-              Added to the vault registry. Billions of vault liquidity can now route into fixed-rate markets. This is the moment Midnight scales.
-            </p>
-            <p class="fb-audience">Unlocks $1B+ vault liquidity</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Full-screen finale: Global Credit Market -->
-  <section class="finale" id="finale">
-    <div class="finale-bg"></div>
-    <div class="finale-content">
-      <p class="finale-eyebrow">The Vision</p>
-      <h2 class="finale-title">Addressing the<br>Global Credit Market</h2>
-      <p class="finale-desc">
-        Onchain lending today captures a fraction of what it could. Fixed rates are the language institutions speak — the foundation of every serious credit market in the world. Midnight makes them available onchain, at scale.
-      </p>
-      <div class="finale-stat">
-        <span class="finale-number">$200T</span>
-        <span class="finale-label">of global credit, now reachable</span>
-      </div>
-      <div class="finale-tags">
-        <span class="finale-tag">Private Credit</span>
-        <span class="finale-tag">RWA</span>
-        <span class="finale-tag">Receivables</span>
-        <span class="finale-tag">Corporate Bonds</span>
-        <span class="finale-tag">Mortgages</span>
-        <span class="finale-tag">Government Bonds</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p class="footer-brand">Morpho Midnight</p>
-    <p class="footer-tagline">The open credit network for the world</p>
-  </footer>
+  </div>
 
   <script src="gsap.min.js"></script>
   <script src="ScrollTrigger.min.js"></script>
