@@ -92,8 +92,8 @@ function applyPhase(phase) {
     const sx = cx - gridW / 2;
     const sy = cy - gridH / 2;
 
-    // Callbacks spans full width on top
-    posBlock(callbacks, sx, sy, gridW);
+    // Callbacks in top-left, same size as other blocks
+    posBlock(callbacks, sx, sy, bw);
     posBlock(core,      sx, sy + bh + gap, bw);
     posBlock(autoroll,  sx + bw + gap, sy + bh + gap, bw);
 
