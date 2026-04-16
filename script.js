@@ -57,11 +57,18 @@ function applyPhase(phase) {
 
   // Block sizes — responsive
   const bw = Math.min(420, vw() * 0.3);   // single block width
-  const bh = 260;                           // block height estimate
   const gap = GAP;
 
-  // Reset visibility
-  allBlocks.forEach(b => b.classList.remove('visible', 'active'));
+  // Measure actual max block height for consistent grid rows
+  allBlocks.forEach(b => { b.classList.add('visible'); b.style.width = bw + 'px'; });
+  const bh = Math.max(...allBlocks.map(b => b.offsetHeight));
+  allBlocks.forEach(b => { b.classList.remove('visible'); b.style.width = ''; });
+
+  // Reset visibility and grid mode
+  allBlocks.forEach(b => {
+    b.classList.remove('visible', 'active', 'grid-mode');
+    b.style.minHeight = '';
+  });
   blocks.classList.remove('hidden');
   bScene.classList.remove('visible', 'flapping');
   stage.classList.remove('daylight');
@@ -84,23 +91,22 @@ function applyPhase(phase) {
 
   } else if (phase === 2) {
     /* ─── Phase 2: Callbacks top-left, Core BL, Auto-Rolling BR ─── */
-    core.classList.add('visible');
-    callbacks.classList.add('visible');
-    autoroll.classList.add('visible', 'active');
+    const visible = [core, callbacks, autoroll];
+    visible.forEach(b => { b.classList.add('visible', 'grid-mode'); b.style.minHeight = bh + 'px'; });
+    autoroll.classList.add('active');
 
     const gridW = bw + gap + bw;
     const gridH = bh + gap + bh;
     const sx = cx - gridW / 2;
     const sy = cy - gridH / 2;
 
-    // Callbacks in top-left, same size as other blocks
     posBlock(callbacks, sx, sy, bw);
     posBlock(core,      sx, sy + bh + gap, bw);
     posBlock(autoroll,  sx + bw + gap, sy + bh + gap, bw);
 
   } else if (phase === 3) {
     /* ─── Phase 3: Full 2×2 grid ─── */
-    allBlocks.forEach(b => b.classList.add('visible'));
+    allBlocks.forEach(b => { b.classList.add('visible', 'grid-mode'); b.style.minHeight = bh + 'px'; });
     adapters.classList.add('active');
 
     const gridW = bw + gap + bw;
